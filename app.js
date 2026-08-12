@@ -7,7 +7,8 @@ const FIELD_ALIASES = {
   occurrenceType: ["Último tipo de insucesso", "Ultimo tipo de insucesso"],
   occurrenceReason: ["Último motivo do insucesso", "Ultimo motivo do insucesso"],
   deliveryTime: ["Horário de entrega", "Horario de entrega", "Tempo de entrega"],
-  createdTime: ["Hora de Criação", "Hora de Criacao"]
+  createdTime: ["Hora de Criação", "Hora de Criacao"],
+  lastReadTime: ["Horário da última leitura", "Horario da ultima leitura"]
 };
 
 // MAPA OFICIAL BASE → SUPERVISOR
@@ -310,6 +311,7 @@ function standardize(rows) {
     occurrenceReason:normalize(row[f.occurrenceReason]),
     deliveryTime:row[f.deliveryTime] ?? "",
     createdTime:row[f.createdTime] ?? "",
+    lastReadTime:row[f.lastReadTime] ?? "",
     original:row
   })).filter(r=>r.tracking || r.status || r.base);
 }
@@ -633,14 +635,28 @@ function preferredBaseFromMainPanel() {
   return "";
 }
 
+function formatDateTime(value) {
+  if (!value) return "";
+  if (value instanceof Date && !isNaN(value)) {
+    return value.toLocaleString("pt-BR", {
+      day:"2-digit", month:"2-digit", year:"numeric",
+      hour:"2-digit", minute:"2-digit"
+    });
+  }
+  const d = new Date(value);
+  if (!isNaN(d)) {
+    return d.toLocaleString("pt-BR", {
+      day:"2-digit", month:"2-digit", year:"numeric",
+      hour:"2-digit", minute:"2-digit"
+    });
+  }
+  return String(value);
+}
+
 function renderAwbsPending(base, driver = "") {
   const rowsBase = rawRows.filter(r => r.base === base);
   const rows = driver ? rowsBase.filter(r => r.driver === driver) : rowsBase;
 
-  const totalBase = rowsBase.length;
-  const deliveredBase = rowsBase.filter(isDelivered).length;
-
-  const deliveredRows = rows.filter(isDelivered);
   const pendingRows = rows.filter(r => !isDelivered(r));
 
   const grouped = new Map();
@@ -660,9 +676,6 @@ function renderAwbsPending(base, driver = "") {
 
   $("awbPendingCount").textContent = pendingRows.length;
   $("awbDriverCount").textContent = drivers.length;
-  $("awbDeliveredCount").textContent = deliveredBase;
-  $("awbBasePerformance").textContent = pct(deliveredBase, totalBase);
-  $("awbBaseTotal").textContent = totalBase;
 
   const el = $("awbPendingList");
 
@@ -676,47 +689,51 @@ function renderAwbsPending(base, driver = "") {
     return;
   }
 
-  el.innerHTML = drivers.map(([driverName, items], driverIndex) => {
-    const awbs = items
-      .map(r => ({
-        awb: r.tracking || "(sem AWB)",
-        status: r.status || "(sem status)"
-      }))
-      .sort((a,b) => a.status.localeCompare(b.status, "pt-BR") || a.awb.localeCompare(b.awb, "pt-BR"));
+  let rowIndex = 1;
 
-    return `
-      <section class="awb-driver-card">
-        <div class="awb-driver-head">
-          <div>
-            <span class="awb-driver-rank">${driverIndex + 1}</span>
-            <strong>${escapeHtml(driverName)}</strong>
-          </div>
-          <span class="awb-driver-count">${items.length} pendente${items.length === 1 ? "" : "s"}</span>
-        </div>
+  el.innerHTML = `
+    <div class="awb-master-table-wrap">
+      <table class="awb-master-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Motorista</th>
+            <th>AWB</th>
+            <th>Status Atual</th>
+            <th>Data da Última Leitura</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${drivers.map(([driverName, items], driverIndex) => {
+            const sortedItems = items
+              .map(r => ({
+                awb: r.tracking || "(sem AWB)",
+                status: r.status || "(sem status)",
+                lastRead: formatDateTime(r.lastReadTime)
+              }))
+              .sort((a,b) => a.status.localeCompare(b.status, "pt-BR") || a.awb.localeCompare(b.awb, "pt-BR"));
 
-        <div class="table-wrap">
-          <table class="data-table awb-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>AWB</th>
-                <th>Status atual</th>
+            return `
+              <tr class="awb-driver-group">
+                <td class="awb-driver-number">${driverIndex + 1}</td>
+                <td colspan="3"><strong>${escapeHtml(driverName)}</strong></td>
+                <td><span class="awb-driver-count">${items.length} AWB${items.length === 1 ? "" : "s"}</span></td>
               </tr>
-            </thead>
-            <tbody>
-              ${awbs.map((item, i) => `
-                <tr>
+              ${sortedItems.map((item, i) => `
+                <tr class="awb-detail-row">
                   <td>${i + 1}</td>
+                  <td></td>
                   <td class="awb-code">${escapeHtml(item.awb)}</td>
                   <td>${escapeHtml(item.status)}</td>
+                  <td>${escapeHtml(item.lastRead || "-")}</td>
                 </tr>
               `).join("")}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    `;
-  }).join("");
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 document.querySelectorAll(".view-tab").forEach(btn=>btn.addEventListener("click",()=>{

@@ -299,30 +299,21 @@
             <div class="print-date" id="awbPrintDate"></div>
           </div>
 
-          <section class="kpi-grid print-kpis">
-            <article class="kpi-card warning">
-              <span>AWBs pendentes</span>
-              <strong id="awbPendingCount">--</strong>
-            </article>
-            <article class="kpi-card">
-              <span>Motoristas com pendência</span>
+          <section class="awb-summary-grid">
+            <article class="awb-summary-card drivers">
+              <span>Motoristas com Pendência</span>
               <strong id="awbDriverCount">--</strong>
+              <small>motoristas</small>
             </article>
-            <article class="kpi-card success">
-              <span>Entregues</span>
-              <strong id="awbDeliveredCount">--</strong>
-            </article>
-            <article class="kpi-card route">
-              <span>Performance da base</span>
-              <strong id="awbBasePerformance">--%</strong>
-            </article>
-            <article class="kpi-card">
-              <span>Total da base</span>
-              <strong id="awbBaseTotal">--</strong>
+
+            <article class="awb-summary-card pending">
+              <span>AWBs Pendentes</span>
+              <strong id="awbPendingCount">--</strong>
+              <small>AWBs</small>
             </article>
           </section>
 
-          <article class="panel">
+          <article class="panel awb-panel">
             <div class="panel-head">
               <div>
                 <span class="panel-kicker">Cobrança Operacional</span>
