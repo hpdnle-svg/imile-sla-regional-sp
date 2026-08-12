@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iMile SLA Regional SP</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">Supervisor: <strong id="supervisorName">Não definido</strong></div>
+        <h1>iMile SLA Regional SP</h1>
+        <p class="subtitle">Painel operacional de SLA, volume e performance</p>
+      </div>
+      <div class="header-actions">
+        <label class="upload-btn no-print">
+          <input id="fileInput" type="file" accept=".xlsx,.xls" hidden />
+          <span>📂 Importar Excel</span>
+        </label>
+        <div class="update-box">
+          <span>Última atualização</span>
+          <strong id="lastUpdate">Nenhum arquivo</strong>
+        </div>
+      </div>
+    </header>
+
+    <nav class="view-tabs no-print">
+      <button class="view-tab active" data-view="dashboard">Painel Regional</button>
+      <button class="view-tab" data-view="baseprint">Resumo por Base</button>
+      <button class="view-tab" data-view="driversprint">Motoristas Ofensores</button>
+    </nav>
+
+    <main>
+      <section class="filters no-print">
+        <select id="filterBase"><option value="">Todas as bases</option></select>
+        <select id="filterDsp"><option value="">Todos os DSPs</option></select>
+        <select id="filterDriver"><option value="">Todos os motoristas</option></select>
+        <select id="filterStatus"><option value="">Todos os status</option></select>
+        <button id="clearFilters" class="ghost-btn">Limpar filtros</button>
+      </section>
+
+      <section id="dashboardView" class="view active">
+        <section class="kpi-grid">
+          <article class="kpi-card">
+            <span>Total de pacotes</span>
+            <strong id="kpiTotal">--</strong>
+            <small>Volume do filtro atual</small>
+          </article>
+          <article class="kpi-card success">
+            <span>Entregues</span>
+            <strong id="kpiDelivered">--</strong>
+            <small id="kpiDeliveredPct">--%</small>
+          </article>
+          <article class="kpi-card route">
+            <span>Em rota</span>
+            <strong id="kpiRoute">--</strong>
+            <small id="kpiRoutePct">--%</small>
+          </article>
+          <article class="kpi-card warning">
+            <span>Não entregues</span>
+            <strong id="kpiPending">--</strong>
+            <small id="kpiPendingPct">--%</small>
+          </article>
+        </section>
+
+        <section class="chart-grid">
+          <article class="panel chart-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-kicker">Performance Regional</span>
+                <h2>Entregue x Não Entregue por Base</h2>
+              </div>
+              <strong id="baseCount">-- bases</strong>
+            </div>
+            <div class="chart-wrap"><canvas id="chartBasePerformance"></canvas></div>
+          </article>
+
+          <article class="panel chart-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-kicker">Status Operacional</span>
+                <h2>Distribuição dos Pacotes</h2>
+              </div>
+            </div>
+            <div class="chart-wrap donut-wrap"><canvas id="chartStatus"></canvas></div>
+          </article>
+        </section>
+
+        <section class="chart-grid">
+          <article class="panel chart-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-kicker">Produtividade</span>
+                <h2>Baixas por Hora</h2>
+              </div>
+              <strong id="hourlyTotal">-- baixas</strong>
+            </div>
+            <div class="chart-wrap"><canvas id="chartHourly"></canvas></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-kicker">Atenção</span>
+                <h2>Principais Ocorrências</h2>
+              </div>
+            </div>
+            <div id="occurrences" class="ranking empty-state">
+              Importe um Excel para visualizar.
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section id="basePrintView" class="view print-sheet">
+        <div class="print-toolbar no-print">
+          <div>
+            <label>Base para envio</label>
+            <select id="printBaseSelect"><option value="">Selecione uma base</option></select>
+          </div>
+          <button class="print-btn" id="saveBaseImageBtn">📸 Salvar imagem PNG</button>
+        </div>
+
+        <div id="baseCaptureArea" class="capture-area">
+        <div class="print-title">
+          <div>
+            <span class="panel-kicker">Resumo Operacional</span>
+            <h2 id="printBaseTitle">Selecione uma base</h2>
+            <p>Supervisor: <strong id="printBaseSupervisor">Não definido</strong></p>
+          </div>
+          <div class="print-date" id="printBaseDate"></div>
+        </div>
+
+        <section class="kpi-grid print-kpis">
+          <article class="kpi-card">
+            <span>Total</span>
+            <strong id="printBaseTotal">--</strong>
+          </article>
+          <article class="kpi-card success">
+            <span>Entregues</span>
+            <strong id="printBaseDelivered">--</strong>
+            <small id="printBaseDeliveredPct">--%</small>
+          </article>
+          <article class="kpi-card warning">
+            <span>Não entregues</span>
+            <strong id="printBaseNotDelivered">--</strong>
+            <small id="printBaseNotDeliveredPct">--%</small>
+          </article>
+          <article class="kpi-card route">
+            <span>Em rota</span>
+            <strong id="printBaseRoute">--</strong>
+          </article>
+        </section>
+
+        <section class="print-grid">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-kicker">Detalhamento</span>
+                <h2>Todos os Status</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Status</th><th>Quantidade</th><th>% do total</th></tr></thead>
+                <tbody id="baseStatusTable"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel chart-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-kicker">Visual</span>
+                <h2>Distribuição da Base</h2>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="chartPrintBaseStatus"></canvas></div>
+          </article>
+        </section>
+        </div>
+      </section>
+
+      <section id="driversPrintView" class="view print-sheet">
+        <div class="print-toolbar no-print">
+          <div>
+            <label>Base para envio</label>
+            <select id="driverBaseSelect"><option value="">Selecione uma base</option></select>
+          </div>
+          <button class="print-btn" id="saveDriversImageBtn">📸 Salvar imagem PNG</button>
+        </div>
+
+        <div id="driversCaptureArea" class="capture-area">
+        <div class="print-title">
+          <div>
+            <span class="panel-kicker">Motoristas Ofensores</span>
+            <h2 id="driverPrintTitle">Selecione uma base</h2>
+            <p>Supervisor: <strong id="driverPrintSupervisor">Não definido</strong></p>
+          </div>
+          <div class="print-date" id="driverPrintDate"></div>
+        </div>
+
+        <section class="kpi-grid print-kpis">
+          <article class="kpi-card">
+            <span>Motoristas com pendência</span>
+            <strong id="offenderCount">--</strong>
+          </article>
+          <article class="kpi-card warning">
+            <span>Pacotes faltantes</span>
+            <strong id="offenderMissing">--</strong>
+          </article>
+          <article class="kpi-card success">
+            <span>Pacotes entregues</span>
+            <strong id="offenderDelivered">--</strong>
+          </article>
+          <article class="kpi-card route">
+            <span>Performance da base</span>
+            <strong id="offenderPerformance">--%</strong>
+          </article>
+        </section>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-kicker">Ranking</span>
+              <h2>Ofensores por Pacotes Faltantes</h2>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table offender-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Motorista</th>
+                  <th>Total</th>
+                  <th>Entregues</th>
+                  <th>Faltam</th>
+                  <th>% Faltam</th>
+                  <th>% Entregue</th>
+                </tr>
+              </thead>
+              <tbody id="offenderTable"></tbody>
+            </table>
+          </div>
+        </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="no-print">
+      iMile SLA Regional SP • V3 • Leitura local do Excel no navegador
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
