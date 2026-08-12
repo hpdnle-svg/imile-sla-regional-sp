@@ -275,10 +275,16 @@
       </section>
 
       <section id="awbsPendingView" class="view print-sheet">
-        <div class="print-toolbar no-print">
+        <div class="print-toolbar no-print awb-toolbar">
           <div>
-            <label>Base para cobrança</label>
+            <label>1. Base para cobrança</label>
             <select id="awbBaseSelect"><option value="">Selecione uma base</option></select>
+          </div>
+          <div>
+            <label>2. Motorista da base</label>
+            <select id="awbDriverSelect" disabled>
+              <option value="">Todos os motoristas da base</option>
+            </select>
           </div>
           <button class="print-btn" id="saveAwbsImageBtn">📸 Salvar imagem PNG</button>
         </div>
@@ -288,7 +294,7 @@
             <div>
               <span class="panel-kicker">AWBs Pendentes</span>
               <h2 id="awbPrintTitle">Selecione uma base</h2>
-              <p>Supervisor: <strong id="awbPrintSupervisor">Não definido</strong></p>
+              <p>Supervisor: <strong id="awbPrintSupervisor">Não definido</strong> • Motorista: <strong id="awbPrintDriver">Todos</strong></p>
             </div>
             <div class="print-date" id="awbPrintDate"></div>
           </div>

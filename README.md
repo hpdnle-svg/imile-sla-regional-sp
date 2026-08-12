@@ -1,4 +1,4 @@
-# iMile SLA Regional SP — V6.5
+# iMile SLA Regional SP — V6.6
 
 ## Alterações principais
 - Mantido o painel regional.
@@ -83,7 +83,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
 - Bases fornecidas sem supervisor continuam exibindo `Não definido`.
 
 
-## V6.5 — Visual mais claro
+## V6.6 — Visual mais claro
 - Fundo geral azul-marinho mais claro.
 - Cards superiores mais iluminados e com maior contraste.
 - Filtros e abas com tons mais claros e destaque visual.
@@ -96,7 +96,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
   - Verde: 93,00% a 100,00%
 
 
-## Correção V6.5 — Percentuais
+## Correção V6.6 — Percentuais
 O relatório Excel não possui coluna de porcentagem. Os percentuais são calculados no navegador:
 
 - Performance Geral = Entregues ÷ Total
@@ -114,7 +114,7 @@ Validação com o arquivo de referência:
 - Performance Geral: 84,09%
 
 
-## V6.5 — Supervisor + múltiplas bases
+## V6.6 — Supervisor + múltiplas bases
 - Novo filtro **Supervisor**.
 - Ao selecionar um supervisor, o painel seleciona automaticamente todas as bases vinculadas a ele.
 - O filtro de Bases virou multiseleção com checkboxes.
@@ -123,14 +123,14 @@ Validação com o arquivo de referência:
 - As telas de Resumo por Base e Motoristas Ofensores continuam com seleção individual de base para gerar imagem.
 
 
-## V6.5 — Correção da importação
+## V6.6 — Correção da importação
 - Corrigido um erro de JavaScript introduzido na alteração do filtro multibase.
 - O erro impedia o script de inicializar e, por consequência, o botão Importar Excel não executava.
 - Após a importação, os filtros Supervisor + Bases são inicializados antes da renderização.
 - Adicionada validação para Excel vazio ou sem aba válida.
 
 
-## V6.5 — Correção da coluna Base
+## V6.6 — Correção da coluna Base
 A Base passa a ser extraída exclusivamente da coluna:
 
 `Última estação de leitura` (coluna Z)
@@ -146,7 +146,7 @@ Agora todos os recursos usam a mesma origem:
 - Supervisor vinculado à Base
 
 
-## V6.5 — AWBs Pendentes
+## V6.6 — AWBs Pendentes
 Nova aba `AWBs Pendentes`, posicionada depois de `Motoristas Ofensores`.
 
 Ela permite:
@@ -159,3 +159,17 @@ Ela permite:
 
 A AWB usa o campo `Número da Etiqueta`.
 A Base continua usando exclusivamente `Última estação de leitura`.
+
+
+## V6.6 — Integração Base → Motorista → AWB
+A aba `AWBs Pendentes` agora funciona em cascata:
+
+1. selecionar Base;
+2. o seletor de Motorista é preenchido somente com motoristas daquela Base;
+3. selecionar um motorista ou manter `Todos os motoristas da base`;
+4. visualizar apenas as AWBs não entregues correspondentes.
+
+Integração com o painel:
+- se o filtro principal tiver somente uma Base marcada, a aba AWBs herda essa Base automaticamente;
+- ao trocar a Base dentro da aba AWBs, a lista de Motoristas é reconstruída;
+- a imagem PNG inclui Base, Supervisor, Motorista e AWBs pendentes.

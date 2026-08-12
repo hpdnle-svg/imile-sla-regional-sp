@@ -435,6 +435,13 @@ function applyFilters() {
 
   $("supervisorName").textContent = f.supervisor || "Regional SP";
   renderDashboard();
+
+  // Mantém a aba AWBs sincronizada quando existe somente uma base ativa.
+  const preferred = preferredBaseFromMainPanel();
+  if (preferred && $("awbBaseSelect")) {
+    $("awbBaseSelect").value = preferred;
+    syncAwbDriverSelect(preferred, false);
+  }
 }
 function destroyChart(name){ if(charts[name]){charts[name].destroy();delete charts[name];} }
 
@@ -587,19 +594,60 @@ function renderDriversPrint(base) {
 }
 
 
-function renderAwbsPending(base) {
-  const rows = rawRows.filter(r => r.base === base);
-  const total = rows.length;
+function driversForBase(base) {
+  if (!base) return [];
+  return uniqueSorted(rawRows.filter(r => r.base === base && r.driver), "driver");
+}
+
+function syncAwbDriverSelect(base, preserveValue = true) {
+  const select = $("awbDriverSelect");
+  if (!select) return;
+
+  const oldValue = preserveValue ? select.value : "";
+  const drivers = driversForBase(base);
+
+  select.innerHTML = `<option value="">Todos os motoristas da base</option>` +
+    drivers.map(driver => `<option value="${escapeHtml(driver)}">${escapeHtml(driver)}</option>`).join("");
+
+  select.disabled = !base || drivers.length === 0;
+
+  if (preserveValue && drivers.includes(oldValue)) {
+    select.value = oldValue;
+  } else {
+    select.value = "";
+  }
+}
+
+function preferredBaseFromMainPanel() {
+  // Se houver exatamente uma base marcada no filtro principal, usa essa base.
+  const selected = [...selectedBases].filter(Boolean);
+  if (selected.length === 1) return selected[0];
+
+  // Se o supervisor tiver apenas uma base visível/selecionada, também usa.
+  const supervisor = $("filterSupervisor")?.value || "";
+  if (supervisor) {
+    const supervisorBases = selected.filter(base => supervisorFor(base) === supervisor);
+    if (supervisorBases.length === 1) return supervisorBases[0];
+  }
+
+  return "";
+}
+
+function renderAwbsPending(base, driver = "") {
+  const rowsBase = rawRows.filter(r => r.base === base);
+  const rows = driver ? rowsBase.filter(r => r.driver === driver) : rowsBase;
+
+  const totalBase = rowsBase.length;
+  const deliveredBase = rowsBase.filter(isDelivered).length;
+
   const deliveredRows = rows.filter(isDelivered);
   const pendingRows = rows.filter(r => !isDelivered(r));
-  const delivered = deliveredRows.length;
 
   const grouped = new Map();
-
   for (const r of pendingRows) {
-    const driver = r.driver || "Motorista não informado";
-    if (!grouped.has(driver)) grouped.set(driver, []);
-    grouped.get(driver).push(r);
+    const driverName = r.driver || "Motorista não informado";
+    if (!grouped.has(driverName)) grouped.set(driverName, []);
+    grouped.get(driverName).push(r);
   }
 
   const drivers = [...grouped.entries()]
@@ -607,25 +655,28 @@ function renderAwbsPending(base) {
 
   $("awbPrintTitle").textContent = base || "Selecione uma base";
   $("awbPrintSupervisor").textContent = supervisorFor(base);
+  $("awbPrintDriver").textContent = driver || "Todos";
   $("awbPrintDate").textContent = new Date().toLocaleDateString("pt-BR");
+
   $("awbPendingCount").textContent = pendingRows.length;
   $("awbDriverCount").textContent = drivers.length;
-  $("awbDeliveredCount").textContent = delivered;
-  $("awbBasePerformance").textContent = pct(delivered, total);
-  $("awbBaseTotal").textContent = total;
+  $("awbDeliveredCount").textContent = deliveredBase;
+  $("awbBasePerformance").textContent = pct(deliveredBase, totalBase);
+  $("awbBaseTotal").textContent = totalBase;
 
   const el = $("awbPendingList");
+
   if (!base) {
-    el.innerHTML = '<div class="empty-state">Selecione uma base para visualizar as pendências.</div>';
+    el.innerHTML = '<div class="empty-state">Selecione primeiro uma base. Depois escolha um motorista ou deixe em Todos.</div>';
     return;
   }
 
   if (!pendingRows.length) {
-    el.innerHTML = '<div class="empty-state">Nenhuma AWB pendente para a base selecionada.</div>';
+    el.innerHTML = `<div class="empty-state">Nenhuma AWB pendente${driver ? " para o motorista selecionado" : ""}.</div>`;
     return;
   }
 
-  el.innerHTML = drivers.map(([driver, items], driverIndex) => {
+  el.innerHTML = drivers.map(([driverName, items], driverIndex) => {
     const awbs = items
       .map(r => ({
         awb: r.tracking || "(sem AWB)",
@@ -638,7 +689,7 @@ function renderAwbsPending(base) {
         <div class="awb-driver-head">
           <div>
             <span class="awb-driver-rank">${driverIndex + 1}</span>
-            <strong>${escapeHtml(driver)}</strong>
+            <strong>${escapeHtml(driverName)}</strong>
           </div>
           <span class="awb-driver-count">${items.length} pendente${items.length === 1 ? "" : "s"}</span>
         </div>
@@ -676,7 +727,18 @@ document.querySelectorAll(".view-tab").forEach(btn=>btn.addEventListener("click"
   $(map[activeView]).classList.add("active");
   if(activeView==="baseprint") renderBasePrint($("printBaseSelect").value);
   if(activeView==="driversprint") renderDriversPrint($("driverBaseSelect").value);
-  if(activeView==="awbspending") renderAwbsPending($("awbBaseSelect").value);
+  if(activeView==="awbspending") {
+    let base = $("awbBaseSelect").value;
+    const preferred = preferredBaseFromMainPanel();
+
+    if (!base && preferred) {
+      base = preferred;
+      $("awbBaseSelect").value = preferred;
+    }
+
+    syncAwbDriverSelect(base, false);
+    renderAwbsPending(base, $("awbDriverSelect").value);
+  }
 }));
 
 $("fileInput").addEventListener("change",async e=>{
@@ -745,7 +807,15 @@ $("clearFilters").addEventListener("click", () => {
 });
 $("printBaseSelect").addEventListener("change",e=>renderBasePrint(e.target.value));
 $("driverBaseSelect").addEventListener("change",e=>renderDriversPrint(e.target.value));
-$("awbBaseSelect").addEventListener("change",e=>renderAwbsPending(e.target.value));
+$("awbBaseSelect").addEventListener("change", e => {
+  const base = e.target.value;
+  syncAwbDriverSelect(base, false);
+  renderAwbsPending(base, "");
+});
+
+$("awbDriverSelect").addEventListener("change", e => {
+  renderAwbsPending($("awbBaseSelect").value, e.target.value);
+});
 async function saveAreaAsPng(areaId, filename) {
   const area = $(areaId);
   if (!area) return;
@@ -790,5 +860,9 @@ $("saveDriversImageBtn").addEventListener("click", () => {
 
 $("saveAwbsImageBtn").addEventListener("click", () => {
   const base = $("awbBaseSelect").value || "base";
-  saveAreaAsPng("awbsCaptureArea", `iMile_AWBs_Pendentes_${base.replaceAll(" ","_")}.png`);
+  const driver = $("awbDriverSelect").value || "todos";
+  saveAreaAsPng(
+    "awbsCaptureArea",
+    `iMile_AWBs_Pendentes_${base.replaceAll(" ","_")}_${driver.replaceAll(" ","_")}.png`
+  );
 });

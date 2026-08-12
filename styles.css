@@ -779,3 +779,38 @@ footer {
   color:#d8eaff !important;
   letter-spacing:.02em;
 }
+
+
+.awb-toolbar {
+  display:grid;
+  grid-template-columns:minmax(230px,1fr) minmax(260px,1.4fr) auto;
+  align-items:end;
+}
+
+.awb-toolbar > div {
+  min-width:0;
+}
+
+.awb-toolbar select {
+  width:100%;
+}
+
+@media(max-width:900px) {
+  .awb-toolbar {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .awb-toolbar .print-btn {
+    grid-column:1 / -1;
+  }
+}
+
+@media(max-width:560px) {
+  .awb-toolbar {
+    grid-template-columns:1fr;
+  }
+
+  .awb-toolbar .print-btn {
+    grid-column:auto;
+  }
+}
