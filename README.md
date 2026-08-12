@@ -1,4 +1,4 @@
-# iMile SLA Regional SP — V4
+# iMile SLA Regional SP — V5
 
 ## Alterações principais
 - Mantido o painel regional.
@@ -70,3 +70,14 @@ Sim. Basta copiar a pasta do projeto ou o arquivo ZIP para outro computador e ab
 Como esta versão usa bibliotecas via CDN (XLSX, Chart.js e html2canvas), o notebook precisa ter acesso à internet para carregar essas bibliotecas.
 
 Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluídas dentro da própria pasta do projeto.
+
+
+## V5 — Performance Geral + Supervisores
+- Novo card **Performance Geral** = Entregues ÷ Total.
+- Faixas de cor:
+  - 0,00% a 79,99%: vermelho
+  - 80,00% a 92,99%: amarelo
+  - 93,00% a 100,00%: verde
+- Incorporado o mapa Base → Supervisor fornecido para a Regional SP.
+- Ao selecionar uma base, o cabeçalho e as telas de imagem exibem automaticamente o supervisor correspondente.
+- Bases fornecidas sem supervisor continuam exibindo `Não definido`.
