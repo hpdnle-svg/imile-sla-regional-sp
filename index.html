@@ -36,8 +36,25 @@
     </nav>
 
     <main>
-      <section class="filters no-print">
-        <select id="filterBase"><option value="">Todas as bases</option></select>
+      <section class="filters no-print enhanced-filters">
+        <select id="filterSupervisor">
+          <option value="">Todos os supervisores</option>
+        </select>
+
+        <div class="multi-select" id="baseMultiSelect">
+          <button type="button" class="multi-select-toggle" id="baseMultiToggle">
+            <span id="baseMultiLabel">Todas as bases</span>
+            <span>▾</span>
+          </button>
+          <div class="multi-select-menu" id="baseMultiMenu">
+            <div class="multi-select-actions">
+              <button type="button" id="selectAllBases">Marcar todas</button>
+              <button type="button" id="clearAllBases">Limpar</button>
+            </div>
+            <div id="baseCheckboxList" class="base-checkbox-list"></div>
+          </div>
+        </div>
+
         <select id="filterDsp"><option value="">Todos os DSPs</option></select>
         <select id="filterDriver"><option value="">Todos os motoristas</option></select>
         <select id="filterStatus"><option value="">Todos os status</option></select>

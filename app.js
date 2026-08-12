@@ -275,6 +275,7 @@ const BASE_SUPERVISORS = {
 let rawRows = [];
 let filteredRows = [];
 let charts = {};
+let selectedBases = new Set();
 let activeView = "dashboard";
 
 const $ = id => document.getElementById(id);
@@ -343,20 +344,95 @@ function fillSelect(id, values, firstLabel) {
   if(values.includes(old)) el.value=old;
 }
 function populateFilters() {
-  const bases=uniqueSorted(rawRows,"base");
-  fillSelect("filterBase",bases,"Todas as bases");
-  fillSelect("printBaseSelect",bases,"Selecione uma base");
-  fillSelect("driverBaseSelect",bases,"Selecione uma base");
-  fillSelect("filterDsp",uniqueSorted(rawRows,"dsp"),"Todos os DSPs");
-  fillSelect("filterDriver",uniqueSorted(rawRows,"driver"),"Todos os motoristas");
-  fillSelect("filterStatus",uniqueSorted(rawRows,"status"),"Todos os status");
+  const bases = uniqueSorted(rawRows,"base");
+  const supervisors = [...new Set(
+    bases.map(base => supervisorFor(base)).filter(name => name && name !== "Não definido")
+  )].sort((a,b)=>a.localeCompare(b,"pt-BR"));
+
+  fillSelect("filterSupervisor", supervisors, "Todos os supervisores");
+  fillSelect("filterDsp", uniqueSorted(rawRows,"dsp"), "Todos os DSPs");
+  fillSelect("filterDriver", uniqueSorted(rawRows,"driver"), "Todos os motoristas");
+  fillSelect("filterStatus", uniqueSorted(rawRows,"status"), "Todos os status");
+
+  fillSelect("printBaseSelect", bases, "Selecione uma base");
+  fillSelect("driverBaseSelect", bases, "Selecione uma base");
+
+  selectedBases = new Set(bases);
+  renderBaseMultiSelect(bases);
 }
+
+function basesForSupervisor(supervisor) {
+  const allBases = uniqueSorted(rawRows, "base");
+  if (!supervisor) return allBases;
+  return allBases.filter(base => supervisorFor(base) === supervisor);
+}
+
+function renderBaseMultiSelect(availableBases = null) {
+  const supervisor = $("filterSupervisor")?.value || "";
+  const bases = availableBases || basesForSupervisor(supervisor);
+  const list = $("baseCheckboxList");
+  if (!list) return;
+
+  // Remove bases no longer available under current supervisor.
+  selectedBases = new Set([...selectedBases].filter(base => bases.includes(base)));
+
+  list.innerHTML = bases.map(base => `
+    <label class="base-check">
+      <input type="checkbox" value="${escapeHtml(base)}" ${selectedBases.has(base) ? "checked" : ""}>
+      <span>${escapeHtml(base)}</span>
+      <span class="supervisor-badge">${escapeHtml(supervisorFor(base))}</span>
+    </label>
+  `).join("");
+
+  list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener("change", () => {
+      if (cb.checked) selectedBases.add(cb.value);
+      else selectedBases.delete(cb.value);
+      updateBaseMultiLabel(bases);
+      applyFilters();
+    });
+  });
+
+  updateBaseMultiLabel(bases);
+}
+
+function updateBaseMultiLabel(availableBases = null) {
+  const supervisor = $("filterSupervisor")?.value || "";
+  const bases = availableBases || basesForSupervisor(supervisor);
+  const count = [...selectedBases].filter(base => bases.includes(base)).length;
+  const label = $("baseMultiLabel");
+  if (!label) return;
+
+  if (!bases.length) {
+    label.textContent = "Nenhuma base";
+  } else if (count === 0) {
+    label.textContent = "Nenhuma base selecionada";
+  } else if (count === bases.length) {
+    label.textContent = supervisor ? `Todas (${count})` : `Todas as bases (${count})`;
+  } else if (count === 1) {
+    label.textContent = [...selectedBases].find(base => bases.includes(base)) || "1 base";
+  } else {
+    label.textContent = `${count} bases selecionadas`;
+  }
+}
+
 function applyFilters() {
-  const f={base:$("filterBase").value,dsp:$("filterDsp").value,driver:$("filterDriver").value,status:$("filterStatus").value};
-  filteredRows=rawRows.filter(r=>
-    (!f.base||r.base===f.base)&&(!f.dsp||r.dsp===f.dsp)&&(!f.driver||r.driver===f.driver)&&(!f.status||r.status===f.status)
+  const f = {
+    supervisor: $("filterSupervisor")?.value || "",
+    dsp: $("filterDsp").value,
+    driver: $("filterDriver").value,
+    status: $("filterStatus").value
+  };
+
+  filteredRows = rawRows.filter(r =>
+    (!f.supervisor || supervisorFor(r.base) === f.supervisor) &&
+    (selectedBases.size === 0 ? false : selectedBases.has(r.base)) &&
+    (!f.dsp || r.dsp === f.dsp) &&
+    (!f.driver || r.driver === f.driver) &&
+    (!f.status || r.status === f.status)
   );
-  $("supervisorName").textContent = f.base ? supervisorFor(f.base) : "Regional SP";
+
+  $("supervisorName").textContent = f.supervisor || "Regional SP";
   renderDashboard();
 }
 function destroyChart(name){ if(charts[name]){charts[name].destroy();delete charts[name];} }
@@ -529,8 +605,54 @@ $("fileInput").addEventListener("change",async e=>{
     $("lastUpdate").textContent=new Date().toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
   }catch(err){console.error(err);alert("Não foi possível ler o Excel.");}
 });
-["filterBase","filterDsp","filterDriver","filterStatus"].forEach(id=>$(id).addEventListener("change",applyFilters));
-$("clearFilters").addEventListener("click",()=>{["filterBase","filterDsp","filterDriver","filterStatus"].forEach(id=>$(id).value="");applyFilters();});
+["filterDsp","filterDriver","filterStatus"].forEach(id => {
+  $(id).addEventListener("change", applyFilters);
+});
+
+$("filterSupervisor").addEventListener("change", () => {
+  const supervisor = $("filterSupervisor").value;
+  const bases = basesForSupervisor(supervisor);
+
+  // Ao escolher supervisor, todas as bases dele vêm selecionadas automaticamente.
+  selectedBases = new Set(bases);
+  renderBaseMultiSelect(bases);
+  $("supervisorName").textContent = supervisor || "Regional SP";
+  applyFilters();
+});
+
+$("baseMultiToggle").addEventListener("click", (e) => {
+  e.stopPropagation();
+  $("baseMultiSelect").classList.toggle("open");
+});
+
+document.addEventListener("click", (e) => {
+  if (!$("baseMultiSelect").contains(e.target)) {
+    $("baseMultiSelect").classList.remove("open");
+  }
+});
+
+$("selectAllBases").addEventListener("click", () => {
+  const bases = basesForSupervisor($("filterSupervisor").value);
+  selectedBases = new Set(bases);
+  renderBaseMultiSelect(bases);
+  applyFilters();
+});
+
+$("clearAllBases").addEventListener("click", () => {
+  selectedBases.clear();
+  renderBaseMultiSelect(basesForSupervisor($("filterSupervisor").value));
+  applyFilters();
+});
+
+$("clearFilters").addEventListener("click", () => {
+  $("filterSupervisor").value = "";
+  ["filterDsp","filterDriver","filterStatus"].forEach(id => $(id).value = "");
+  const bases = uniqueSorted(rawRows,"base");
+  selectedBases = new Set(bases);
+  renderBaseMultiSelect(bases);
+  $("supervisorName").textContent = "Regional SP";
+  applyFilters();
+});applyFilters();});
 $("printBaseSelect").addEventListener("change",e=>renderBasePrint(e.target.value));
 $("driverBaseSelect").addEventListener("change",e=>renderDriversPrint(e.target.value));
 async function saveAreaAsPng(areaId, filename) {
