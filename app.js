@@ -600,8 +600,14 @@ $("fileInput").addEventListener("change",async e=>{
   try{
     const buffer=await file.arrayBuffer();
     const wb=XLSX.read(buffer,{type:"array",cellDates:true});
-    const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""});
-    rawRows=standardize(rows);filteredRows=rawRows;populateFilters();renderDashboard();
+    if (!wb.SheetNames || !wb.SheetNames.length) throw new Error("Excel sem planilha válida.");
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{defval:""});
+    if (!rows.length) throw new Error("A primeira aba do Excel está vazia.");
+    rawRows=standardize(rows);
+    filteredRows=rawRows;
+    populateFilters();
+    applyFilters();
     $("lastUpdate").textContent=new Date().toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
   }catch(err){console.error(err);alert("Não foi possível ler o Excel.");}
 });
@@ -652,7 +658,7 @@ $("clearFilters").addEventListener("click", () => {
   renderBaseMultiSelect(bases);
   $("supervisorName").textContent = "Regional SP";
   applyFilters();
-});applyFilters();});
+});
 $("printBaseSelect").addEventListener("change",e=>renderBasePrint(e.target.value));
 $("driverBaseSelect").addEventListener("change",e=>renderDriversPrint(e.target.value));
 async function saveAreaAsPng(areaId, filename) {
