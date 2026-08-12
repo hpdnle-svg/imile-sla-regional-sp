@@ -1,4 +1,4 @@
-# iMile SLA Regional SP — V5
+# iMile SLA Regional SP — V6.1
 
 ## Alterações principais
 - Mantido o painel regional.
@@ -81,3 +81,34 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
 - Incorporado o mapa Base → Supervisor fornecido para a Regional SP.
 - Ao selecionar uma base, o cabeçalho e as telas de imagem exibem automaticamente o supervisor correspondente.
 - Bases fornecidas sem supervisor continuam exibindo `Não definido`.
+
+
+## V6.1 — Visual mais claro
+- Fundo geral azul-marinho mais claro.
+- Cards superiores mais iluminados e com maior contraste.
+- Filtros e abas com tons mais claros e destaque visual.
+- Painéis de gráficos separados do fundo com camadas mais visíveis.
+- Tabelas com cabeçalho destacado.
+- Mantidos os 5 cards em uma única linha para telas de notebook/desktop.
+- Mantida a regra de Performance Geral:
+  - Vermelho: 0,00% a 79,99%
+  - Amarelo: 80,00% a 92,99%
+  - Verde: 93,00% a 100,00%
+
+
+## Correção V6.1 — Percentuais
+O relatório Excel não possui coluna de porcentagem. Os percentuais são calculados no navegador:
+
+- Performance Geral = Entregues ÷ Total
+- % Entregues = Entregues ÷ Total
+- % Em rota = Em rota ÷ Total
+- % Não entregues = Não entregues ÷ Total
+
+Todos os percentuais agora são exibidos com 2 casas decimais.
+
+Validação com o arquivo de referência:
+- Total: 465
+- Entregues: 391
+- Em rota: 43
+- Não entregues: 74
+- Performance Geral: 84,09%

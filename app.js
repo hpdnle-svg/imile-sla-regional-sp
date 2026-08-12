@@ -312,10 +312,17 @@ function standardize(rows) {
     original:row
   })).filter(r=>r.tracking || r.status || r.base);
 }
-const isDelivered = r => lower(r.status) === "entregue";
-const isRoute = r => lower(r.status).includes("rota de entrega");
+function normalizeStatus(value) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLocaleLowerCase("pt-BR");
+}
+const isDelivered = r => normalizeStatus(r.status) === "entregue";
+const isRoute = r => normalizeStatus(r.status).includes("rota de entrega");
 const pctNum = (v,t) => t ? (v/t*100) : 0;
-const pct = (v,t) => `${pctNum(v,t).toFixed(1).replace(".",",")}%`;
+const pct = (v,t) => `${pctNum(v,t).toFixed(2).replace(".",",")}%`;
 const supervisorFor = base => (base && BASE_SUPERVISORS[base]) ? BASE_SUPERVISORS[base] : "Não definido";
 const uniqueSorted = (rows,key) => [...new Set(rows.map(r=>r[key]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
 
@@ -355,21 +362,25 @@ function applyFilters() {
 function destroyChart(name){ if(charts[name]){charts[name].destroy();delete charts[name];} }
 
 function renderKpis() {
-  const total=filteredRows.length, delivered=filteredRows.filter(isDelivered).length, route=filteredRows.filter(isRoute).length, nd=total-delivered;
-  const performance = total ? (delivered / total) * 100 : 0;
+  const total = filteredRows.length;
+  const delivered = filteredRows.filter(isDelivered).length;
+  const route = filteredRows.filter(isRoute).length;
+  const notDelivered = Math.max(0, total - delivered);
+  const performance = pctNum(delivered, total);
 
-  $("kpiTotal").textContent=total.toLocaleString("pt-BR");
-  $("kpiDelivered").textContent=delivered.toLocaleString("pt-BR");
-  $("kpiRoute").textContent=route.toLocaleString("pt-BR");
-  $("kpiPending").textContent=nd.toLocaleString("pt-BR");
-  $("kpiDeliveredPct").textContent=pct(delivered,total);
-  $("kpiRoutePct").textContent=pct(route,total);
-  $("kpiPendingPct").textContent=pct(nd,total);
+  $("kpiTotal").textContent = total.toLocaleString("pt-BR");
+  $("kpiDelivered").textContent = delivered.toLocaleString("pt-BR");
+  $("kpiRoute").textContent = route.toLocaleString("pt-BR");
+  $("kpiPending").textContent = notDelivered.toLocaleString("pt-BR");
 
+  $("kpiDeliveredPct").textContent = pct(delivered, total);
+  $("kpiRoutePct").textContent = pct(route, total);
+  $("kpiPendingPct").textContent = pct(notDelivered, total);
   $("kpiPerformance").textContent = `${performance.toFixed(2).replace(".", ",")}%`;
 
   const card = $("performanceCard");
   card.classList.remove("performance-red","performance-yellow","performance-green");
+
   if (performance < 80) {
     card.classList.add("performance-red");
   } else if (performance < 93) {
