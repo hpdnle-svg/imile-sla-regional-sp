@@ -705,3 +705,77 @@ footer {
     grid-template-columns:1fr;
   }
 }
+
+
+.awb-driver-list {
+  display:grid;
+  gap:14px;
+}
+
+.awb-driver-card {
+  border:1px solid rgba(151,190,240,.20);
+  border-radius:14px;
+  overflow:hidden;
+  background:rgba(15,31,56,.34);
+}
+
+.awb-driver-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:13px 14px;
+  background:linear-gradient(135deg,#24456f,#1d385e);
+  border-bottom:1px solid rgba(151,190,240,.18);
+}
+
+.awb-driver-head > div {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.awb-driver-rank {
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  border-radius:9px;
+  background:#2f82ff;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+}
+
+.awb-driver-count {
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,189,74,.16);
+  border:1px solid rgba(255,189,74,.28);
+  color:#ffd778;
+  font-size:11px;
+  font-weight:800;
+}
+
+.awb-table th:nth-child(1),
+.awb-table td:nth-child(1) {
+  width:56px;
+  text-align:center;
+}
+
+.awb-table th:nth-child(2),
+.awb-table td:nth-child(2) {
+  text-align:left;
+}
+
+.awb-table th:nth-child(3),
+.awb-table td:nth-child(3) {
+  text-align:left;
+}
+
+.awb-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight:800;
+  color:#d8eaff !important;
+  letter-spacing:.02em;
+}

@@ -356,6 +356,7 @@ function populateFilters() {
 
   fillSelect("printBaseSelect", bases, "Selecione uma base");
   fillSelect("driverBaseSelect", bases, "Selecione uma base");
+  fillSelect("awbBaseSelect", bases, "Selecione uma base");
 
   selectedBases = new Set(bases);
   renderBaseMultiSelect(bases);
@@ -585,14 +586,97 @@ function renderDriversPrint(base) {
     </tr>`).join(""):`<tr><td colspan="7">Nenhum motorista com pendência para a base selecionada.</td></tr>`;
 }
 
+
+function renderAwbsPending(base) {
+  const rows = rawRows.filter(r => r.base === base);
+  const total = rows.length;
+  const deliveredRows = rows.filter(isDelivered);
+  const pendingRows = rows.filter(r => !isDelivered(r));
+  const delivered = deliveredRows.length;
+
+  const grouped = new Map();
+
+  for (const r of pendingRows) {
+    const driver = r.driver || "Motorista não informado";
+    if (!grouped.has(driver)) grouped.set(driver, []);
+    grouped.get(driver).push(r);
+  }
+
+  const drivers = [...grouped.entries()]
+    .sort((a,b) => b[1].length - a[1].length || a[0].localeCompare(b[0], "pt-BR"));
+
+  $("awbPrintTitle").textContent = base || "Selecione uma base";
+  $("awbPrintSupervisor").textContent = supervisorFor(base);
+  $("awbPrintDate").textContent = new Date().toLocaleDateString("pt-BR");
+  $("awbPendingCount").textContent = pendingRows.length;
+  $("awbDriverCount").textContent = drivers.length;
+  $("awbDeliveredCount").textContent = delivered;
+  $("awbBasePerformance").textContent = pct(delivered, total);
+  $("awbBaseTotal").textContent = total;
+
+  const el = $("awbPendingList");
+  if (!base) {
+    el.innerHTML = '<div class="empty-state">Selecione uma base para visualizar as pendências.</div>';
+    return;
+  }
+
+  if (!pendingRows.length) {
+    el.innerHTML = '<div class="empty-state">Nenhuma AWB pendente para a base selecionada.</div>';
+    return;
+  }
+
+  el.innerHTML = drivers.map(([driver, items], driverIndex) => {
+    const awbs = items
+      .map(r => ({
+        awb: r.tracking || "(sem AWB)",
+        status: r.status || "(sem status)"
+      }))
+      .sort((a,b) => a.status.localeCompare(b.status, "pt-BR") || a.awb.localeCompare(b.awb, "pt-BR"));
+
+    return `
+      <section class="awb-driver-card">
+        <div class="awb-driver-head">
+          <div>
+            <span class="awb-driver-rank">${driverIndex + 1}</span>
+            <strong>${escapeHtml(driver)}</strong>
+          </div>
+          <span class="awb-driver-count">${items.length} pendente${items.length === 1 ? "" : "s"}</span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table awb-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>AWB</th>
+                <th>Status atual</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${awbs.map((item, i) => `
+                <tr>
+                  <td>${i + 1}</td>
+                  <td class="awb-code">${escapeHtml(item.awb)}</td>
+                  <td>${escapeHtml(item.status)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    `;
+  }).join("");
+}
+
 document.querySelectorAll(".view-tab").forEach(btn=>btn.addEventListener("click",()=>{
   document.querySelectorAll(".view-tab").forEach(b=>b.classList.remove("active"));
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
   btn.classList.add("active"); activeView=btn.dataset.view;
-  const map={dashboard:"dashboardView",baseprint:"basePrintView",driversprint:"driversPrintView"};
+  const map={dashboard:"dashboardView",baseprint:"basePrintView",driversprint:"driversPrintView",awbspending:"awbsPendingView"};
   $(map[activeView]).classList.add("active");
   if(activeView==="baseprint") renderBasePrint($("printBaseSelect").value);
   if(activeView==="driversprint") renderDriversPrint($("driverBaseSelect").value);
+  if(activeView==="awbspending") renderAwbsPending($("awbBaseSelect").value);
 }));
 
 $("fileInput").addEventListener("change",async e=>{
@@ -661,6 +745,7 @@ $("clearFilters").addEventListener("click", () => {
 });
 $("printBaseSelect").addEventListener("change",e=>renderBasePrint(e.target.value));
 $("driverBaseSelect").addEventListener("change",e=>renderDriversPrint(e.target.value));
+$("awbBaseSelect").addEventListener("change",e=>renderAwbsPending(e.target.value));
 async function saveAreaAsPng(areaId, filename) {
   const area = $(areaId);
   if (!area) return;
@@ -700,4 +785,10 @@ $("saveBaseImageBtn").addEventListener("click", () => {
 $("saveDriversImageBtn").addEventListener("click", () => {
   const base = $("driverBaseSelect").value || "base";
   saveAreaAsPng("driversCaptureArea", `iMile_Ofensores_${base.replaceAll(" ","_")}.png`);
+});
+
+
+$("saveAwbsImageBtn").addEventListener("click", () => {
+  const base = $("awbBaseSelect").value || "base";
+  saveAreaAsPng("awbsCaptureArea", `iMile_AWBs_Pendentes_${base.replaceAll(" ","_")}.png`);
 });

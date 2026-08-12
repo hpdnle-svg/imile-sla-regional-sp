@@ -33,6 +33,7 @@
       <button class="view-tab active" data-view="dashboard">Painel Regional</button>
       <button class="view-tab" data-view="baseprint">Resumo por Base</button>
       <button class="view-tab" data-view="driversprint">Motoristas Ofensores</button>
+      <button class="view-tab" data-view="awbspending">AWBs Pendentes</button>
     </nav>
 
     <main>
@@ -272,6 +273,64 @@
         </article>
         </div>
       </section>
+
+      <section id="awbsPendingView" class="view print-sheet">
+        <div class="print-toolbar no-print">
+          <div>
+            <label>Base para cobrança</label>
+            <select id="awbBaseSelect"><option value="">Selecione uma base</option></select>
+          </div>
+          <button class="print-btn" id="saveAwbsImageBtn">📸 Salvar imagem PNG</button>
+        </div>
+
+        <div id="awbsCaptureArea" class="capture-area">
+          <div class="print-title">
+            <div>
+              <span class="panel-kicker">AWBs Pendentes</span>
+              <h2 id="awbPrintTitle">Selecione uma base</h2>
+              <p>Supervisor: <strong id="awbPrintSupervisor">Não definido</strong></p>
+            </div>
+            <div class="print-date" id="awbPrintDate"></div>
+          </div>
+
+          <section class="kpi-grid print-kpis">
+            <article class="kpi-card warning">
+              <span>AWBs pendentes</span>
+              <strong id="awbPendingCount">--</strong>
+            </article>
+            <article class="kpi-card">
+              <span>Motoristas com pendência</span>
+              <strong id="awbDriverCount">--</strong>
+            </article>
+            <article class="kpi-card success">
+              <span>Entregues</span>
+              <strong id="awbDeliveredCount">--</strong>
+            </article>
+            <article class="kpi-card route">
+              <span>Performance da base</span>
+              <strong id="awbBasePerformance">--%</strong>
+            </article>
+            <article class="kpi-card">
+              <span>Total da base</span>
+              <strong id="awbBaseTotal">--</strong>
+            </article>
+          </section>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-kicker">Cobrança Operacional</span>
+                <h2>Motoristas e AWBs que ainda faltam entregar</h2>
+              </div>
+            </div>
+
+            <div id="awbPendingList" class="awb-driver-list">
+              <div class="empty-state">Selecione uma base para visualizar as pendências.</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
     </main>
 
     <footer class="no-print">
