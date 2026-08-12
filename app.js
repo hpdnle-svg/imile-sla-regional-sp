@@ -1,7 +1,7 @@
 const FIELD_ALIASES = {
   tracking: ["Número da Etiqueta", "Numero da Etiqueta", "Tracking Number", "Waybill", "AWB"],
   status: ["Último status", "Ultimo status", "Status"],
-  base: ["Station", "Base de recebimento", "Última estação de leitura"],
+  base: ["Última estação de leitura", "Ultima estação de leitura", "Ultima estacao de leitura"],
   driver: ["Motorista", "Nome do Motorista de Coleta"],
   dsp: ["Fornecedor do condutor", "Kwai Vendedor da última milha"],
   occurrenceType: ["Último tipo de insucesso", "Ultimo tipo de insucesso"],

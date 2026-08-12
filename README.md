@@ -1,4 +1,4 @@
-# iMile SLA Regional SP — V6.3
+# iMile SLA Regional SP — V6.4
 
 ## Alterações principais
 - Mantido o painel regional.
@@ -83,7 +83,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
 - Bases fornecidas sem supervisor continuam exibindo `Não definido`.
 
 
-## V6.3 — Visual mais claro
+## V6.4 — Visual mais claro
 - Fundo geral azul-marinho mais claro.
 - Cards superiores mais iluminados e com maior contraste.
 - Filtros e abas com tons mais claros e destaque visual.
@@ -96,7 +96,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
   - Verde: 93,00% a 100,00%
 
 
-## Correção V6.3 — Percentuais
+## Correção V6.4 — Percentuais
 O relatório Excel não possui coluna de porcentagem. Os percentuais são calculados no navegador:
 
 - Performance Geral = Entregues ÷ Total
@@ -114,7 +114,7 @@ Validação com o arquivo de referência:
 - Performance Geral: 84,09%
 
 
-## V6.3 — Supervisor + múltiplas bases
+## V6.4 — Supervisor + múltiplas bases
 - Novo filtro **Supervisor**.
 - Ao selecionar um supervisor, o painel seleciona automaticamente todas as bases vinculadas a ele.
 - O filtro de Bases virou multiseleção com checkboxes.
@@ -123,8 +123,24 @@ Validação com o arquivo de referência:
 - As telas de Resumo por Base e Motoristas Ofensores continuam com seleção individual de base para gerar imagem.
 
 
-## V6.3 — Correção da importação
+## V6.4 — Correção da importação
 - Corrigido um erro de JavaScript introduzido na alteração do filtro multibase.
 - O erro impedia o script de inicializar e, por consequência, o botão Importar Excel não executava.
 - Após a importação, os filtros Supervisor + Bases são inicializados antes da renderização.
 - Adicionada validação para Excel vazio ou sem aba válida.
+
+
+## V6.4 — Correção da coluna Base
+A Base passa a ser extraída exclusivamente da coluna:
+
+`Última estação de leitura` (coluna Z)
+
+A leitura anterior podia usar `Station`, o que gerava divergências nos filtros, supervisores e comparações entre bases.
+
+Agora todos os recursos usam a mesma origem:
+- Filtro Supervisor
+- Filtro múltiplas Bases
+- Performance por Base
+- Resumo por Base
+- Motoristas Ofensores
+- Supervisor vinculado à Base
