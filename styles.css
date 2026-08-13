@@ -971,3 +971,218 @@ footer {
     min-width:900px;
   }
 }
+
+
+.top-bases-table th:nth-child(1),
+.top-bases-table td:nth-child(1) {
+  width:52px;
+  text-align:center;
+}
+
+.top-bases-table td:nth-child(n+3),
+.top-bases-table th:nth-child(n+3) {
+  text-align:right;
+}
+
+.rank-performance {
+  display:inline-block;
+  min-width:74px;
+  text-align:center;
+  padding:4px 8px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:11px;
+}
+
+.rank-green {
+  color:#8ef0c8;
+  background:rgba(53,211,154,.14);
+  border:1px solid rgba(53,211,154,.24);
+}
+
+.rank-yellow {
+  color:#ffd978;
+  background:rgba(255,189,74,.14);
+  border:1px solid rgba(255,189,74,.24);
+}
+
+.rank-red {
+  color:#ff9ca2;
+  background:rgba(255,107,114,.14);
+  border:1px solid rgba(255,107,114,.24);
+}
+
+
+/* ==========================================================
+   V6.9 — Maior separação entre fundo, abas, cards e painéis
+   ========================================================== */
+
+:root {
+  --v69-card: #29466f;
+  --v69-card-2: #233f66;
+  --v69-panel: #223d63;
+  --v69-panel-2: #1d375b;
+  --v69-tab: #27466f;
+  --v69-tab-hover: #315784;
+  --v69-filter: #29496f;
+  --v69-border: rgba(170, 204, 247, .32);
+  --v69-border-strong: rgba(117, 176, 255, .48);
+}
+
+/* Cabeçalho um pouco mais luminoso, sem competir com o conteúdo */
+.topbar {
+  background: linear-gradient(135deg, #285081 0%, #1f416c 48%, #19365c 100%);
+  border-color: rgba(145, 190, 247, .38);
+}
+
+/* Abas claramente separadas do fundo */
+.view-tabs {
+  background: #1b3558;
+  border-color: var(--v69-border);
+}
+
+.view-tab {
+  background: var(--v69-tab);
+  border-color: rgba(170, 204, 247, .18);
+  color: #dbe7f6;
+}
+
+.view-tab:hover {
+  background: var(--v69-tab-hover);
+  border-color: rgba(117, 176, 255, .42);
+}
+
+.view-tab.active {
+  background: linear-gradient(135deg, #3e87e4, #2f72c8);
+  border-color: rgba(143, 196, 255, .68);
+  box-shadow: 0 8px 20px rgba(47, 130, 255, .24);
+}
+
+/* Bloco de filtros mais destacado */
+.filters {
+  background: #1a3457;
+  border-color: var(--v69-border);
+}
+
+select,
+.multi-select-toggle,
+.ghost-btn {
+  background: var(--v69-filter);
+  border-color: rgba(170, 204, 247, .25);
+}
+
+select:hover,
+.multi-select-toggle:hover,
+.ghost-btn:hover {
+  background: #31557e;
+  border-color: rgba(117, 176, 255, .46);
+}
+
+/* KPIs: uma camada bem visível acima do fundo */
+.kpi-card {
+  background: linear-gradient(145deg, var(--v69-card), var(--v69-card-2));
+  border-color: var(--v69-border);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, .18);
+}
+
+.kpi-card:hover {
+  border-color: var(--v69-border-strong);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, .22);
+}
+
+.kpi-card span {
+  color: #d0dbea;
+}
+
+.kpi-card small {
+  color: #c2cfe1;
+}
+
+/* Painéis de gráficos e tabelas: mais claros que o fundo */
+.panel {
+  background: linear-gradient(145deg, var(--v69-panel), var(--v69-panel-2));
+  border-color: var(--v69-border);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .16);
+}
+
+.panel-head {
+  border-bottom: 1px solid rgba(170, 204, 247, .10);
+  padding-bottom: 10px;
+}
+
+/* Menus internos de multiseleção */
+.multi-select-menu {
+  background: #223e64;
+  border-color: rgba(117, 176, 255, .46);
+}
+
+.multi-select-actions {
+  background: #29496f;
+}
+
+/* Tabelas com cabeçalho e linhas mais fáceis de distinguir */
+.data-table th {
+  background: rgba(73, 121, 179, .28);
+  color: #d4e1f2;
+}
+
+.data-table tbody tr:nth-child(odd) {
+  background: rgba(255, 255, 255, .018);
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, .055);
+}
+
+.data-table tbody tr:hover {
+  background: rgba(89, 155, 235, .10);
+}
+
+/* AWBs: mantém a tabela compacta, mas aumenta contraste */
+.awb-panel {
+  background: linear-gradient(145deg, #254368, #1e385c);
+}
+
+.awb-master-table-wrap {
+  border-color: rgba(170, 204, 247, .28);
+}
+
+.awb-detail-row td {
+  background: #213b60;
+  border-bottom-color: rgba(170, 204, 247, .12);
+}
+
+.awb-detail-row:nth-child(even) td {
+  background: #28466f;
+}
+
+.awb-driver-group td {
+  background: linear-gradient(90deg, #315b8c, #294d79);
+}
+
+/* Área capturada em PNG também fica um pouco mais clara */
+.capture-area {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(77, 151, 255, .22), transparent 32%),
+    linear-gradient(180deg, #1e416d 0%, #17345a 100%);
+}
+
+/* Cards especiais continuam com semáforo, mas ganham luminosidade */
+.performance-card.performance-red {
+  background: linear-gradient(145deg, #7a323b, #5a242c);
+}
+
+.performance-card.performance-yellow {
+  background: linear-gradient(145deg, #7d672a, #5d4b20);
+}
+
+.performance-card.performance-green {
+  background: linear-gradient(145deg, #26705a, #1d5646);
+}
+
+/* Melhor leitura em notebooks sem aumentar muito a altura */
+@media (min-width: 900px) {
+  .kpi-card {
+    min-height: 126px;
+  }
+}

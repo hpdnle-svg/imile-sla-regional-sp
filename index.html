@@ -103,14 +103,27 @@
             <div class="chart-wrap"><canvas id="chartBasePerformance"></canvas></div>
           </article>
 
-          <article class="panel chart-panel">
+          <article class="panel">
             <div class="panel-head">
               <div>
-                <span class="panel-kicker">Status Operacional</span>
-                <h2>Distribuição dos Pacotes</h2>
+                <span class="panel-kicker">Ranking Operacional</span>
+                <h2>Top 10 Bases por Conclusão</h2>
               </div>
             </div>
-            <div class="chart-wrap donut-wrap"><canvas id="chartStatus"></canvas></div>
+            <div class="table-wrap">
+              <table class="data-table top-bases-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Base</th>
+                    <th>Entregues</th>
+                    <th>Em rota</th>
+                    <th>Conclusão</th>
+                  </tr>
+                </thead>
+                <tbody id="topBasesRanking"></tbody>
+              </table>
+            </div>
           </article>
         </section>
 

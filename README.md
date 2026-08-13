@@ -1,4 +1,4 @@
-# iMile SLA Regional SP — V6.7
+# iMile SLA Regional SP — V6.9
 
 ## Alterações principais
 - Mantido o painel regional.
@@ -83,7 +83,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
 - Bases fornecidas sem supervisor continuam exibindo `Não definido`.
 
 
-## V6.7 — Visual mais claro
+## V6.9 — Visual mais claro
 - Fundo geral azul-marinho mais claro.
 - Cards superiores mais iluminados e com maior contraste.
 - Filtros e abas com tons mais claros e destaque visual.
@@ -96,7 +96,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
   - Verde: 93,00% a 100,00%
 
 
-## Correção V6.7 — Percentuais
+## Correção V6.9 — Percentuais
 O relatório Excel não possui coluna de porcentagem. Os percentuais são calculados no navegador:
 
 - Performance Geral = Entregues ÷ Total
@@ -114,7 +114,7 @@ Validação com o arquivo de referência:
 - Performance Geral: 84,09%
 
 
-## V6.7 — Supervisor + múltiplas bases
+## V6.9 — Supervisor + múltiplas bases
 - Novo filtro **Supervisor**.
 - Ao selecionar um supervisor, o painel seleciona automaticamente todas as bases vinculadas a ele.
 - O filtro de Bases virou multiseleção com checkboxes.
@@ -123,14 +123,14 @@ Validação com o arquivo de referência:
 - As telas de Resumo por Base e Motoristas Ofensores continuam com seleção individual de base para gerar imagem.
 
 
-## V6.7 — Correção da importação
+## V6.9 — Correção da importação
 - Corrigido um erro de JavaScript introduzido na alteração do filtro multibase.
 - O erro impedia o script de inicializar e, por consequência, o botão Importar Excel não executava.
 - Após a importação, os filtros Supervisor + Bases são inicializados antes da renderização.
 - Adicionada validação para Excel vazio ou sem aba válida.
 
 
-## V6.7 — Correção da coluna Base
+## V6.9 — Correção da coluna Base
 A Base passa a ser extraída exclusivamente da coluna:
 
 `Última estação de leitura` (coluna Z)
@@ -146,7 +146,7 @@ Agora todos os recursos usam a mesma origem:
 - Supervisor vinculado à Base
 
 
-## V6.7 — AWBs Pendentes
+## V6.9 — AWBs Pendentes
 Nova aba `AWBs Pendentes`, posicionada depois de `Motoristas Ofensores`.
 
 Ela permite:
@@ -161,7 +161,7 @@ A AWB usa o campo `Número da Etiqueta`.
 A Base continua usando exclusivamente `Última estação de leitura`.
 
 
-## V6.7 — Integração Base → Motorista → AWB
+## V6.9 — Integração Base → Motorista → AWB
 A aba `AWBs Pendentes` agora funciona em cascata:
 
 1. selecionar Base;
@@ -175,7 +175,7 @@ Integração com o painel:
 - a imagem PNG inclui Base, Supervisor, Motorista e AWBs pendentes.
 
 
-## V6.7 — AWBs Pendentes otimizada para PNG
+## V6.9 — AWBs Pendentes otimizada para PNG
 - Mantidos apenas 2 cards:
   - Motoristas com Pendência
   - AWBs Pendentes
@@ -190,3 +190,26 @@ Integração com o painel:
   - Data da Última Leitura
 - A data da última leitura é puxada do campo `Horário da última leitura`.
 - O layout foi encurtado para melhorar o print/PNG e aumentar a legibilidade.
+
+
+## V6.9 — Integração completa Supervisor → Bases → Motoristas → AWBs
+- Painel Geral: `Status Operacional` substituído por `Top 10 Bases por Conclusão`.
+- Ranking ordenado da melhor para a pior base.
+- Exibe Base, Entregues, Em Rota e % de Conclusão.
+- Ao selecionar Supervisor, somente bases dele ficam disponíveis.
+- Motoristas, DSPs e Status passam a respeitar as bases do Supervisor.
+- Resumo por Base, Motoristas Ofensores e AWBs Pendentes usam o mesmo contexto.
+- Na aba AWBs Pendentes, Base de cobrança é limitada às bases do Supervisor atual.
+- Ao escolher a Base, aparecem somente os Motoristas daquela Base.
+- Ao escolher o Motorista, aparecem somente suas AWBs pendentes.
+
+
+## V6.9 — Contraste visual ampliado
+- Fundo geral permanece azul escuro.
+- Cards KPI ficaram moderadamente mais claros.
+- Painéis de gráficos e tabelas ficaram mais claros que o fundo.
+- Abas ganharam maior contraste entre estado normal, hover e selecionado.
+- Filtros e seletores ficaram mais visíveis.
+- Tabelas receberam cabeçalhos e linhas alternadas com maior separação.
+- A aba AWBs Pendentes manteve o formato compacto, mas com melhor contraste.
+- A captura PNG acompanha a nova hierarquia visual.

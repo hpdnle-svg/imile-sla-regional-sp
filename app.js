@@ -352,16 +352,17 @@ function populateFilters() {
   )].sort((a,b)=>a.localeCompare(b,"pt-BR"));
 
   fillSelect("filterSupervisor", supervisors, "Todos os supervisores");
-  fillSelect("filterDsp", uniqueSorted(rawRows,"dsp"), "Todos os DSPs");
-  fillSelect("filterDriver", uniqueSorted(rawRows,"driver"), "Todos os motoristas");
-  fillSelect("filterStatus", uniqueSorted(rawRows,"status"), "Todos os status");
+
+  selectedBases = new Set(bases);
+  renderBaseMultiSelect(bases);
 
   fillSelect("printBaseSelect", bases, "Selecione uma base");
   fillSelect("driverBaseSelect", bases, "Selecione uma base");
   fillSelect("awbBaseSelect", bases, "Selecione uma base");
 
-  selectedBases = new Set(bases);
-  renderBaseMultiSelect(bases);
+  fillSelect("filterDsp", uniqueSorted(rawRows,"dsp"), "Todos os DSPs");
+  fillSelect("filterDriver", uniqueSorted(rawRows,"driver"), "Todos os motoristas");
+  fillSelect("filterStatus", uniqueSorted(rawRows,"status"), "Todos os status");
 }
 
 function basesForSupervisor(supervisor) {
@@ -392,6 +393,7 @@ function renderBaseMultiSelect(availableBases = null) {
       if (cb.checked) selectedBases.add(cb.value);
       else selectedBases.delete(cb.value);
       updateBaseMultiLabel(bases);
+      syncDriverFiltersFromCurrentScope();
       applyFilters();
     });
   });
@@ -417,6 +419,44 @@ function updateBaseMultiLabel(availableBases = null) {
   } else {
     label.textContent = `${count} bases selecionadas`;
   }
+}
+
+
+function currentSupervisor() {
+  return $("filterSupervisor")?.value || "";
+}
+
+function visibleBasesForSupervisor() {
+  return basesForSupervisor(currentSupervisor());
+}
+
+function syncDependentBaseSelectors() {
+  const bases = visibleBasesForSupervisor();
+
+  const validSelected = [...selectedBases].filter(base => bases.includes(base));
+  selectedBases = new Set(validSelected.length ? validSelected : bases);
+  renderBaseMultiSelect(bases);
+
+  fillSelect("printBaseSelect", bases, "Selecione uma base");
+  fillSelect("driverBaseSelect", bases, "Selecione uma base");
+  fillSelect("awbBaseSelect", bases, "Selecione uma base");
+
+  if ($("awbBaseSelect").value && !bases.includes($("awbBaseSelect").value)) {
+    $("awbBaseSelect").value = "";
+    syncAwbDriverSelect("", false);
+  }
+}
+
+function syncDriverFiltersFromCurrentScope() {
+  const supervisor = currentSupervisor();
+  const rows = rawRows.filter(r =>
+    (!supervisor || supervisorFor(r.base) === supervisor) &&
+    selectedBases.has(r.base)
+  );
+
+  fillSelect("filterDriver", uniqueSorted(rows, "driver"), "Todos os motoristas");
+  fillSelect("filterDsp", uniqueSorted(rows, "dsp"), "Todos os DSPs");
+  fillSelect("filterStatus", uniqueSorted(rows, "status"), "Todos os status");
 }
 
 function applyFilters() {
@@ -493,14 +533,51 @@ function renderBasePerformanceChart() {
     }}
   });
 }
-function renderStatusChart() {
-  destroyChart("status");
-  const data=countBy(filteredRows,"status").slice(0,8);
-  charts.status=new Chart($("chartStatus"),{
-    type:"doughnut",
-    data:{labels:data.map(x=>x[0]),datasets:[{data:data.map(x=>x[1]),backgroundColor:["#35d39a","#2c7dff","#ffbd4a","#9b7bff","#ff6b72","#49c5b6","#7e9cc4","#d58fff"],borderColor:"#0c1b32",borderWidth:3}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:"66%",plugins:{legend:{position:"bottom",labels:{boxWidth:10,padding:14}}}}
-  });
+function renderTopBasesRanking() {
+  const grouped = new Map();
+
+  for (const r of filteredRows.filter(r => r.base)) {
+    if (!grouped.has(r.base)) grouped.set(r.base, {total:0, delivered:0, route:0});
+    const g = grouped.get(r.base);
+    g.total++;
+    if (isDelivered(r)) g.delivered++;
+    if (isRoute(r)) g.route++;
+  }
+
+  const ranking = [...grouped.entries()]
+    .map(([base,g]) => ({
+      base,
+      total:g.total,
+      delivered:g.delivered,
+      route:g.route,
+      completion:pctNum(g.delivered,g.total)
+    }))
+    .sort((a,b) => b.completion - a.completion || b.delivered - a.delivered || a.base.localeCompare(b.base,"pt-BR"))
+    .slice(0,10);
+
+  const tbody = $("topBasesRanking");
+  if (!tbody) return;
+
+  if (!ranking.length) {
+    tbody.innerHTML = `<tr><td colspan="5">Nenhuma base para exibir.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = ranking.map((r,i) => {
+    let perfClass = "rank-red";
+    if (r.completion >= 93) perfClass = "rank-green";
+    else if (r.completion >= 80) perfClass = "rank-yellow";
+
+    return `
+      <tr>
+        <td>${i+1}</td>
+        <td>${escapeHtml(r.base)}</td>
+        <td>${r.delivered}</td>
+        <td>${r.route}</td>
+        <td><span class="rank-performance ${perfClass}">${r.completion.toFixed(2).replace(".",",")}%</span></td>
+      </tr>
+    `;
+  }).join("");
 }
 function hourFromValue(v) {
   if(!v) return null;
@@ -544,7 +621,7 @@ function renderOccurrences() {
   el.className="ranking";
   el.innerHTML=data.map(([n,v])=>`<div class="rank-row"><div class="rank-name">${escapeHtml(n)}</div><div class="rank-value">${v}</div></div>`).join("");
 }
-function renderDashboard(){ renderKpis();renderBasePerformanceChart();renderStatusChart();renderHourlyChart();renderOccurrences(); }
+function renderDashboard(){ renderKpis();renderBasePerformanceChart();renderTopBasesRanking();renderHourlyChart();renderOccurrences(); }
 
 function renderBasePrint(base) {
   const rows=rawRows.filter(r=>r.base===base), total=rows.length, delivered=rows.filter(isDelivered).length, route=rows.filter(isRoute).length, nd=total-delivered;
@@ -737,6 +814,7 @@ function renderAwbsPending(base, driver = "") {
 }
 
 document.querySelectorAll(".view-tab").forEach(btn=>btn.addEventListener("click",()=>{
+  syncDependentBaseSelectors();
   document.querySelectorAll(".view-tab").forEach(b=>b.classList.remove("active"));
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
   btn.classList.add("active"); activeView=btn.dataset.view;
@@ -782,11 +860,17 @@ $("filterSupervisor").addEventListener("change", () => {
   const supervisor = $("filterSupervisor").value;
   const bases = basesForSupervisor(supervisor);
 
-  // Ao escolher supervisor, todas as bases dele vêm selecionadas automaticamente.
   selectedBases = new Set(bases);
-  renderBaseMultiSelect(bases);
+  syncDependentBaseSelectors();
+  syncDriverFiltersFromCurrentScope();
+
   $("supervisorName").textContent = supervisor || "Regional SP";
   applyFilters();
+
+  $("printBaseSelect").value = "";
+  $("driverBaseSelect").value = "";
+  $("awbBaseSelect").value = "";
+  syncAwbDriverSelect("", false);
 });
 
 $("baseMultiToggle").addEventListener("click", (e) => {
@@ -804,21 +888,34 @@ $("selectAllBases").addEventListener("click", () => {
   const bases = basesForSupervisor($("filterSupervisor").value);
   selectedBases = new Set(bases);
   renderBaseMultiSelect(bases);
+  syncDriverFiltersFromCurrentScope();
   applyFilters();
 });
 
 $("clearAllBases").addEventListener("click", () => {
   selectedBases.clear();
   renderBaseMultiSelect(basesForSupervisor($("filterSupervisor").value));
+  syncDriverFiltersFromCurrentScope();
   applyFilters();
 });
 
 $("clearFilters").addEventListener("click", () => {
   $("filterSupervisor").value = "";
   ["filterDsp","filterDriver","filterStatus"].forEach(id => $(id).value = "");
+
   const bases = uniqueSorted(rawRows,"base");
   selectedBases = new Set(bases);
   renderBaseMultiSelect(bases);
+
+  fillSelect("printBaseSelect", bases, "Selecione uma base");
+  fillSelect("driverBaseSelect", bases, "Selecione uma base");
+  fillSelect("awbBaseSelect", bases, "Selecione uma base");
+  syncAwbDriverSelect("", false);
+
+  fillSelect("filterDsp", uniqueSorted(rawRows,"dsp"), "Todos os DSPs");
+  fillSelect("filterDriver", uniqueSorted(rawRows,"driver"), "Todos os motoristas");
+  fillSelect("filterStatus", uniqueSorted(rawRows,"status"), "Todos os status");
+
   $("supervisorName").textContent = "Regional SP";
   applyFilters();
 });
@@ -826,6 +923,15 @@ $("printBaseSelect").addEventListener("change",e=>renderBasePrint(e.target.value
 $("driverBaseSelect").addEventListener("change",e=>renderDriversPrint(e.target.value));
 $("awbBaseSelect").addEventListener("change", e => {
   const base = e.target.value;
+  const allowed = visibleBasesForSupervisor();
+
+  if (base && !allowed.includes(base)) {
+    e.target.value = "";
+    syncAwbDriverSelect("", false);
+    renderAwbsPending("", "");
+    return;
+  }
+
   syncAwbDriverSelect(base, false);
   renderAwbsPending(base, "");
 });
