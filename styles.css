@@ -1447,3 +1447,231 @@ select option {
 .rank-green { color:#12543E; background:#A9DFC9; border-color:#72BFA4; }
 .rank-yellow { color:#59450D; background:#F4DEA0; border-color:#D8BA5F; }
 .rank-red { color:#5B1E24; background:#F0B3B7; border-color:#D98289; }
+
+
+/* ==========================================================
+   V7.2 — Azul Gelo reforçado
+   Overrides finais para garantir contraste visível
+   ========================================================== */
+
+html body {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(29, 128, 242, .26), transparent 34%),
+    linear-gradient(180deg, #0C3B77 0%, #082E60 50%, #05264F 100%) !important;
+  color: #F7FAFF;
+}
+
+/* TOPBAR continua iMile azul forte */
+body .topbar {
+  background: linear-gradient(135deg, #0E66C9 0%, #0B56AF 48%, #08478F 100%) !important;
+  border-color: rgba(151, 205, 255, .48) !important;
+}
+
+/* ABAS */
+body .view-tabs {
+  background: #174F89 !important;
+  border-color: rgba(187, 222, 251, .52) !important;
+}
+
+body .view-tab {
+  background: #8CB9DB !important;
+  color: #082D52 !important;
+  border-color: rgba(229, 244, 255, .72) !important;
+}
+
+body .view-tab:hover {
+  background: #A7CCE6 !important;
+  color: #082D52 !important;
+}
+
+body .view-tab.active {
+  background: #D2E8F7 !important;
+  color: #06294A !important;
+  border-color: #F4FAFE !important;
+  box-shadow: 0 8px 20px rgba(0, 33, 73, .20) !important;
+}
+
+/* FILTROS */
+body .filters {
+  background: #2A659A !important;
+  border-color: rgba(201, 229, 250, .52) !important;
+}
+
+body select,
+body .multi-select-toggle,
+body .ghost-btn {
+  background: #B7D7ED !important;
+  color: #082D52 !important;
+  border-color: rgba(234, 246, 253, .82) !important;
+}
+
+body select:hover,
+body .multi-select-toggle:hover,
+body .ghost-btn:hover {
+  background: #C8E2F3 !important;
+  color: #082D52 !important;
+}
+
+/* KPI CARDS */
+body .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green) {
+  background: linear-gradient(145deg, #D5EAF7 0%, #B8D8ED 100%) !important;
+  border: 1px solid rgba(244, 250, 254, .90) !important;
+  color: #082D52 !important;
+  box-shadow: 0 14px 34px rgba(1, 26, 58, .20) !important;
+}
+
+body .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green) span,
+body .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green) small {
+  color: #244D71 !important;
+}
+
+body .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green) strong {
+  color: #062D54 !important;
+}
+
+/* PAINÉIS E GRÁFICOS */
+body .panel {
+  background: linear-gradient(145deg, #D7EBF7 0%, #B9D9EE 100%) !important;
+  border: 1px solid rgba(245, 251, 255, .92) !important;
+  color: #082D52 !important;
+  box-shadow: 0 14px 34px rgba(1, 26, 58, .20) !important;
+}
+
+body .panel h2,
+body .panel h3,
+body .panel strong,
+body .panel .panel-kicker {
+  color: #062D54 !important;
+}
+
+body .panel p,
+body .panel small,
+body .panel-head > strong {
+  color: #315A7D !important;
+}
+
+body .chart-wrap {
+  background: #C9E1F2 !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  border-radius: 13px !important;
+  padding: 8px !important;
+}
+
+/* TABELAS */
+body .data-table {
+  background: #D8EAF6 !important;
+  color: #082D52 !important;
+}
+
+body .data-table th {
+  background: #7EACD1 !important;
+  color: #082D52 !important;
+  border-bottom-color: rgba(16, 58, 94, .20) !important;
+}
+
+body .data-table tbody tr:nth-child(odd) {
+  background: #DDEDF7 !important;
+}
+
+body .data-table tbody tr:nth-child(even) {
+  background: #CFE4F2 !important;
+}
+
+body .data-table tbody tr:hover {
+  background: #BEDCEC !important;
+}
+
+body .data-table td {
+  color: #0C365B !important;
+  border-bottom-color: rgba(19, 64, 101, .14) !important;
+}
+
+/* MULTI SELECT */
+body .multi-select-menu {
+  background: #C9E1F2 !important;
+  border-color: rgba(236, 247, 254, .86) !important;
+}
+
+body .multi-select-actions {
+  background: #A7CCE6 !important;
+}
+
+body .multi-select-actions button {
+  background: #CFE5F3 !important;
+  color: #082D52 !important;
+}
+
+body .base-check {
+  color: #082D52 !important;
+}
+
+body .base-check:hover {
+  background: rgba(255,255,255,.34) !important;
+}
+
+/* AWBs */
+body .awb-panel {
+  background: linear-gradient(145deg, #D7EBF7 0%, #B9D9EE 100%) !important;
+}
+
+body .awb-master-table-wrap {
+  border-color: rgba(35, 86, 126, .26) !important;
+}
+
+body .awb-master-table thead th {
+  background: #6B9FCA !important;
+  color: #062D54 !important;
+}
+
+body .awb-driver-group td {
+  background: #93BAD8 !important;
+  color: #082D52 !important;
+}
+
+body .awb-detail-row td {
+  background: #DDEDF7 !important;
+  color: #0B355B !important;
+}
+
+body .awb-detail-row:nth-child(even) td {
+  background: #CFE4F2 !important;
+}
+
+body .awb-code {
+  color: #062D54 !important;
+}
+
+/* CAPTURA PNG */
+body .capture-area {
+  background:
+    linear-gradient(180deg, #79A9D0 0%, #5F92BC 100%) !important;
+  border: 1px solid rgba(224, 241, 252, .58) !important;
+}
+
+/* Mantém os semáforos soberanos */
+body .performance-card.performance-red {
+  background: linear-gradient(145deg, #F3C0C4, #E9939A) !important;
+  color: #561B21 !important;
+}
+
+body .performance-card.performance-yellow {
+  background: linear-gradient(145deg, #F6E4A9, #EBCB73) !important;
+  color: #58430A !important;
+}
+
+body .performance-card.performance-green {
+  background: linear-gradient(145deg, #B3E4D0, #82CEB3) !important;
+  color: #123E30 !important;
+}
+
+body .performance-card.performance-red span,
+body .performance-card.performance-red small,
+body .performance-card.performance-red strong,
+body .performance-card.performance-yellow span,
+body .performance-card.performance-yellow small,
+body .performance-card.performance-yellow strong,
+body .performance-card.performance-green span,
+body .performance-card.performance-green small,
+body .performance-card.performance-green strong {
+  color: inherit !important;
+}
