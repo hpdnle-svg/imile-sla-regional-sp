@@ -283,8 +283,8 @@ const $ = id => document.getElementById(id);
 const normalize = v => String(v ?? "").trim();
 const lower = v => normalize(v).toLocaleLowerCase("pt-BR");
 
-Chart.defaults.color = "#91a6c7";
-Chart.defaults.borderColor = "rgba(148,174,217,.10)";
+Chart.defaults.color = "#D7E7F7";
+Chart.defaults.borderColor = "rgba(190,215,240,.18)";
 Chart.defaults.font.family = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
 
 function resolveColumn(headers, aliases) {
@@ -529,7 +529,7 @@ function renderBasePerformanceChart() {
     ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{
       x:{stacked:false,grid:{display:false}},
-      y:{stacked:false,beginAtZero:true,grid:{color:"rgba(148,174,217,.08)"}}
+      y:{stacked:false,beginAtZero:true,grid:{color:"rgba(190,215,240,.16)"}}
     }}
   });
 }
@@ -607,7 +607,7 @@ function renderHourlyChart() {
       tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} baixas`}}
     },scales:{
       x:{grid:{display:false}},
-      y:{beginAtZero:true,ticks:{precision:0},grid:{color:"rgba(148,174,217,.08)"}}
+      y:{beginAtZero:true,ticks:{precision:0},grid:{color:"rgba(190,215,240,.16)"}}
     }}
   });
 }

@@ -1675,3 +1675,65 @@ body .performance-card.performance-green small,
 body .performance-card.performance-green strong {
   color: inherit !important;
 }
+
+
+/* ==========================================================
+   V7.3 — Gráficos novamente em azul escuro
+   Cards continuam Azul Gelo
+   ========================================================== */
+
+/* Todos os painéis que contêm gráficos voltam ao azul iMile escuro */
+body .panel.chart-panel {
+  background: linear-gradient(145deg, #174B82 0%, #103A69 100%) !important;
+  border: 1px solid rgba(126, 180, 233, .48) !important;
+  color: #F6FAFF !important;
+  box-shadow: 0 14px 34px rgba(0, 23, 55, .25) !important;
+}
+
+/* Área interna do gráfico ainda mais profunda para destacar as séries */
+body .panel.chart-panel .chart-wrap {
+  background: linear-gradient(180deg, #123F70 0%, #0C315A 100%) !important;
+  border: 1px solid rgba(113, 169, 224, .34) !important;
+  border-radius: 13px !important;
+  padding: 8px !important;
+}
+
+/* Títulos e textos dos gráficos em claro */
+body .panel.chart-panel h2,
+body .panel.chart-panel h3,
+body .panel.chart-panel strong,
+body .panel.chart-panel .panel-kicker,
+body .panel.chart-panel .panel-head > strong {
+  color: #F3F8FF !important;
+}
+
+body .panel.chart-panel p,
+body .panel.chart-panel small {
+  color: #BCD1E8 !important;
+}
+
+/* Canvas fica transparente para usar o azul escuro do container */
+body .panel.chart-panel canvas {
+  background: transparent !important;
+}
+
+/* No Resumo por Base, o gráfico de distribuição também deve ficar escuro */
+body #basePrintView .chart-panel {
+  background: linear-gradient(145deg, #174B82 0%, #103A69 100%) !important;
+}
+
+body #basePrintView .chart-panel .chart-wrap {
+  background: linear-gradient(180deg, #123F70 0%, #0C315A 100%) !important;
+}
+
+/* Mantém cards claros para contraste visual */
+body .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green) {
+  background: linear-gradient(145deg, #D5EAF7 0%, #B8D8ED 100%) !important;
+  color: #082D52 !important;
+}
+
+/* Ranking e tabelas permanecem claros para leitura rápida */
+body .top-bases-table,
+body .awb-master-table {
+  color: #082D52 !important;
+}
