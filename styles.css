@@ -1244,3 +1244,206 @@ select, .multi-select-toggle, .ghost-btn {
   .awb-toolbar { grid-template-columns:repeat(2,1fr); }
   .awb-toolbar .print-btn { grid-column:1 / -1; }
 }
+
+
+/* ==========================================================
+   V7.1 — Azul Gelo
+   Fundo iMile escuro + superfícies #9BC2E3
+   ========================================================== */
+
+:root {
+  --ice-blue: #9BC2E3;
+  --ice-blue-soft: #AED0EA;
+  --ice-blue-light: #BCD9EE;
+  --navy-text: #0B2F55;
+  --navy-muted: #244C70;
+  --ice-border: rgba(220, 239, 252, .72);
+}
+
+/* Mantém a moldura geral no azul iMile */
+body {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(36, 133, 246, .28), transparent 34%),
+    linear-gradient(180deg, #0D3D78 0%, #092F61 48%, #06264F 100%);
+}
+
+/* Cards principais */
+.kpi-card {
+  background: linear-gradient(145deg, var(--ice-blue-light), var(--ice-blue));
+  border-color: var(--ice-border);
+  color: var(--navy-text);
+  box-shadow: 0 14px 30px rgba(1, 25, 55, .20);
+}
+
+.kpi-card span,
+.kpi-card small {
+  color: var(--navy-muted);
+}
+
+.kpi-card strong {
+  color: var(--navy-text);
+}
+
+/* Painéis e áreas dos gráficos */
+.panel {
+  background: linear-gradient(145deg, var(--ice-blue-light), var(--ice-blue));
+  border-color: var(--ice-border);
+  color: var(--navy-text);
+}
+
+.panel h2,
+.panel h3,
+.panel strong,
+.panel-kicker {
+  color: var(--navy-text);
+}
+
+.panel p,
+.panel small {
+  color: var(--navy-muted);
+}
+
+.chart-wrap {
+  background: rgba(255,255,255,.13);
+  border-radius: 12px;
+}
+
+/* Tabelas sobre Azul Gelo */
+.data-table {
+  color: var(--navy-text);
+}
+
+.data-table th {
+  background: #6E9FC8;
+  color: #082D52;
+  border-color: rgba(29,75,113,.18);
+}
+
+.data-table tbody tr:nth-child(odd) {
+  background: rgba(255,255,255,.20);
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: rgba(255,255,255,.38);
+}
+
+.data-table tbody tr:hover {
+  background: rgba(255,255,255,.56);
+}
+
+.data-table td {
+  color: #103A60;
+  border-color: rgba(31,77,115,.14);
+}
+
+/* Filtros continuam em azul médio para não perder hierarquia */
+.filters {
+  background: #2E6598;
+  border-color: rgba(190,220,248,.42);
+}
+
+select,
+.multi-select-toggle,
+.ghost-btn {
+  background: #7EACD1;
+  color: #092F55;
+  border-color: rgba(220,239,252,.58);
+}
+
+select option {
+  background: #D5E7F4;
+  color: #092F55;
+}
+
+/* Abas ficam mais claras, mas ainda separadas dos painéis */
+.view-tabs {
+  background: #225A91;
+  border-color: rgba(190,220,248,.42);
+}
+
+.view-tab {
+  background: #78A9D4;
+  color: #0A3158;
+  border-color: rgba(220,239,252,.38);
+  font-weight: 800;
+}
+
+.view-tab:hover {
+  background: #8CB9DB;
+}
+
+.view-tab.active {
+  background: #B6D7ED;
+  color: #082D52;
+  border-color: rgba(255,255,255,.78);
+  box-shadow: 0 8px 20px rgba(2,38,77,.20);
+}
+
+/* Área do PNG */
+.capture-area {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255,255,255,.22), transparent 32%),
+    linear-gradient(180deg, #4F82B5 0%, #32689D 100%);
+}
+
+/* AWB operacional */
+.awb-panel {
+  background: linear-gradient(145deg, #B8D8ED, #9BC2E3);
+}
+
+.awb-master-table-wrap {
+  border-color: rgba(24,68,106,.24);
+}
+
+.awb-driver-group td {
+  background: #6D9EC7;
+  color: #082D52;
+}
+
+.awb-detail-row td,
+.awb-detail-row:nth-child(even) td {
+  background: rgba(255,255,255,.30);
+  color: #0B355B;
+  border-bottom-color: rgba(24,68,106,.13);
+}
+
+.awb-detail-row:nth-child(even) td {
+  background: rgba(255,255,255,.48);
+}
+
+.awb-code {
+  color: #082D52 !important;
+}
+
+/* Semáforo continua visualmente soberano */
+.performance-card.performance-red {
+  background: linear-gradient(145deg, #F0B3B7, #E48F95);
+  color: #541A20;
+}
+
+.performance-card.performance-yellow {
+  background: linear-gradient(145deg, #F4DEA0, #E9C96F);
+  color: #56420B;
+}
+
+.performance-card.performance-green {
+  background: linear-gradient(145deg, #A9DFC9, #7BCBAE);
+  color: #123E30;
+}
+
+.performance-card.performance-red span,
+.performance-card.performance-red strong,
+.performance-card.performance-red small,
+.performance-card.performance-yellow span,
+.performance-card.performance-yellow strong,
+.performance-card.performance-yellow small,
+.performance-card.performance-green span,
+.performance-card.performance-green strong,
+.performance-card.performance-green small {
+  color: inherit;
+}
+
+/* Ranking: badges mantêm vermelho/amarelo/verde */
+.rank-green { color:#12543E; background:#A9DFC9; border-color:#72BFA4; }
+.rank-yellow { color:#59450D; background:#F4DEA0; border-color:#D8BA5F; }
+.rank-red { color:#5B1E24; background:#F0B3B7; border-color:#D98289; }

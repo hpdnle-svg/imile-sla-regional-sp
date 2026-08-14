@@ -1,4 +1,4 @@
-# iMile SLA Regional SP — V7.0
+# iMile SLA Regional SP — V7.1
 
 ## Alterações principais
 - Mantido o painel regional.
@@ -83,7 +83,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
 - Bases fornecidas sem supervisor continuam exibindo `Não definido`.
 
 
-## V7.0 — Visual mais claro
+## V7.1 — Visual mais claro
 - Fundo geral azul-marinho mais claro.
 - Cards superiores mais iluminados e com maior contraste.
 - Filtros e abas com tons mais claros e destaque visual.
@@ -96,7 +96,7 @@ Para uma versão totalmente portátil/offline, as bibliotecas podem ser incluíd
   - Verde: 93,00% a 100,00%
 
 
-## Correção V7.0 — Percentuais
+## Correção V7.1 — Percentuais
 O relatório Excel não possui coluna de porcentagem. Os percentuais são calculados no navegador:
 
 - Performance Geral = Entregues ÷ Total
@@ -114,7 +114,7 @@ Validação com o arquivo de referência:
 - Performance Geral: 84,09%
 
 
-## V7.0 — Supervisor + múltiplas bases
+## V7.1 — Supervisor + múltiplas bases
 - Novo filtro **Supervisor**.
 - Ao selecionar um supervisor, o painel seleciona automaticamente todas as bases vinculadas a ele.
 - O filtro de Bases virou multiseleção com checkboxes.
@@ -123,14 +123,14 @@ Validação com o arquivo de referência:
 - As telas de Resumo por Base e Motoristas Ofensores continuam com seleção individual de base para gerar imagem.
 
 
-## V7.0 — Correção da importação
+## V7.1 — Correção da importação
 - Corrigido um erro de JavaScript introduzido na alteração do filtro multibase.
 - O erro impedia o script de inicializar e, por consequência, o botão Importar Excel não executava.
 - Após a importação, os filtros Supervisor + Bases são inicializados antes da renderização.
 - Adicionada validação para Excel vazio ou sem aba válida.
 
 
-## V7.0 — Correção da coluna Base
+## V7.1 — Correção da coluna Base
 A Base passa a ser extraída exclusivamente da coluna:
 
 `Última estação de leitura` (coluna Z)
@@ -146,7 +146,7 @@ Agora todos os recursos usam a mesma origem:
 - Supervisor vinculado à Base
 
 
-## V7.0 — AWBs Pendentes
+## V7.1 — AWBs Pendentes
 Nova aba `AWBs Pendentes`, posicionada depois de `Motoristas Ofensores`.
 
 Ela permite:
@@ -161,7 +161,7 @@ A AWB usa o campo `Número da Etiqueta`.
 A Base continua usando exclusivamente `Última estação de leitura`.
 
 
-## V7.0 — Integração Base → Motorista → AWB
+## V7.1 — Integração Base → Motorista → AWB
 A aba `AWBs Pendentes` agora funciona em cascata:
 
 1. selecionar Base;
@@ -175,7 +175,7 @@ Integração com o painel:
 - a imagem PNG inclui Base, Supervisor, Motorista e AWBs pendentes.
 
 
-## V7.0 — AWBs Pendentes otimizada para PNG
+## V7.1 — AWBs Pendentes otimizada para PNG
 - Mantidos apenas 2 cards:
   - Motoristas com Pendência
   - AWBs Pendentes
@@ -192,7 +192,7 @@ Integração com o painel:
 - O layout foi encurtado para melhorar o print/PNG e aumentar a legibilidade.
 
 
-## V7.0 — Integração completa Supervisor → Bases → Motoristas → AWBs
+## V7.1 — Integração completa Supervisor → Bases → Motoristas → AWBs
 - Painel Geral: `Status Operacional` substituído por `Top 10 Bases por Conclusão`.
 - Ranking ordenado da melhor para a pior base.
 - Exibe Base, Entregues, Em Rota e % de Conclusão.
@@ -204,7 +204,7 @@ Integração com o painel:
 - Ao escolher o Motorista, aparecem somente suas AWBs pendentes.
 
 
-## V7.0 — Contraste visual ampliado
+## V7.1 — Contraste visual ampliado
 - Fundo geral permanece azul escuro.
 - Cards KPI ficaram moderadamente mais claros.
 - Painéis de gráficos e tabelas ficaram mais claros que o fundo.
@@ -215,7 +215,7 @@ Integração com o painel:
 - A captura PNG acompanha a nova hierarquia visual.
 
 
-## V7.0
+## V7.1
 - Fundo atualizado para azul mais próximo da identidade iMile.
 - Cards, gráficos, painéis, abas e filtros mais claros para contraste.
 - Resumo por Base ganhou card Performance da Base com semáforo.
@@ -223,3 +223,14 @@ Integração com o painel:
 - Opções: Em rota, Todos os pendentes, Não entregues e Status específico.
 - Fluxo mantido: Supervisor → Base → Motorista → Tipo de cobrança/Status → AWBs.
 - "Em rota" é a opção padrão.
+
+
+## V7.1 — Azul Gelo
+- Fundo geral permanece no azul iMile escuro.
+- Cards e painéis principais usam Azul Gelo #9BC2E3.
+- Áreas de gráficos receberam superfícies mais claras.
+- Textos sobre Azul Gelo usam azul-marinho para maior contraste.
+- Abas e filtros foram clareados mantendo hierarquia visual.
+- Tabelas receberam linhas claras e texto escuro.
+- Semáforos de performance permanecem vermelho, amarelo e verde.
+- A área de exportação PNG acompanha a nova identidade.
