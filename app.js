@@ -634,6 +634,11 @@ function renderBasePrint(base) {
   $("printBaseNotDelivered").textContent=nd;
   $("printBaseNotDeliveredPct").textContent=pct(nd,total);
   $("printBaseRoute").textContent=route;
+  const basePerformance=pctNum(delivered,total);
+  $("printBasePerformance").textContent=`${basePerformance.toFixed(2).replace(".",",")}%`;
+  const perfCard=$("printBasePerformanceCard");
+  perfCard.classList.remove("performance-red","performance-yellow","performance-green");
+  perfCard.classList.add(basePerformance < 80 ? "performance-red" : basePerformance < 93 ? "performance-yellow" : "performance-green");
 
   const statuses=countBy(rows,"status");
   $("baseStatusTable").innerHTML=statuses.length?statuses.map(([s,n])=>`<tr><td>${escapeHtml(s)}</td><td>${n}</td><td>${pct(n,total)}</td></tr>`).join(""):`<tr><td colspan="3">Selecione uma base</td></tr>`;
@@ -734,7 +739,17 @@ function renderAwbsPending(base, driver = "") {
   const rowsBase = rawRows.filter(r => r.base === base);
   const rows = driver ? rowsBase.filter(r => r.driver === driver) : rowsBase;
 
-  const pendingRows = rows.filter(r => !isDelivered(r));
+  const chargeType = $("awbChargeType")?.value || "route";
+  const specificStatus = $("awbSpecificStatus")?.value || "";
+
+  let pendingRows = rows.filter(r => !isDelivered(r));
+  if (chargeType === "route") {
+    pendingRows = rows.filter(isRoute);
+  } else if (chargeType === "notdelivered") {
+    pendingRows = rows.filter(r => !isDelivered(r));
+  } else if (chargeType === "status" && specificStatus) {
+    pendingRows = rows.filter(r => normalizeStatus(r.status) === normalizeStatus(specificStatus));
+  }
 
   const grouped = new Map();
   for (const r of pendingRows) {
@@ -933,6 +948,13 @@ $("awbBaseSelect").addEventListener("change", e => {
   }
 
   syncAwbDriverSelect(base, false);
+
+  const baseRows = rawRows.filter(r => r.base === base && !isDelivered(r));
+  const statuses = uniqueSorted(baseRows, "status");
+  fillSelect("awbSpecificStatus", statuses, "Selecione um status");
+  $("awbChargeType").disabled = !base;
+  $("awbSpecificStatus").disabled = !base;
+
   renderAwbsPending(base, "");
 });
 
@@ -980,6 +1002,17 @@ $("saveDriversImageBtn").addEventListener("click", () => {
   saveAreaAsPng("driversCaptureArea", `iMile_Ofensores_${base.replaceAll(" ","_")}.png`);
 });
 
+
+
+$("awbChargeType").addEventListener("change", e => {
+  const isSpecific = e.target.value === "status";
+  $("awbSpecificStatusWrap").style.display = isSpecific ? "block" : "none";
+  renderAwbsPending($("awbBaseSelect").value, $("awbDriverSelect").value);
+});
+
+$("awbSpecificStatus").addEventListener("change", () => {
+  renderAwbsPending($("awbBaseSelect").value, $("awbDriverSelect").value);
+});
 
 $("saveAwbsImageBtn").addEventListener("click", () => {
   const base = $("awbBaseSelect").value || "base";

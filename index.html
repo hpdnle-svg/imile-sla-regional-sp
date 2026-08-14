@@ -191,6 +191,11 @@
             <span>Em rota</span>
             <strong id="printBaseRoute">--</strong>
           </article>
+          <article class="kpi-card performance-card" id="printBasePerformanceCard">
+            <span>Performance da Base</span>
+            <strong id="printBasePerformance">--%</strong>
+            <small>Entregues ÷ Total</small>
+          </article>
         </section>
 
         <section class="print-grid">
@@ -297,6 +302,21 @@
             <label>2. Motorista da base</label>
             <select id="awbDriverSelect" disabled>
               <option value="">Todos os motoristas da base</option>
+            </select>
+          </div>
+          <div>
+            <label>3. O que deseja cobrar?</label>
+            <select id="awbChargeType" disabled>
+              <option value="route">Em rota</option>
+              <option value="pending">Todos os pendentes</option>
+              <option value="notdelivered">Não entregues</option>
+              <option value="status">Status específico</option>
+            </select>
+          </div>
+          <div id="awbSpecificStatusWrap" style="display:none">
+            <label>4. Status específico</label>
+            <select id="awbSpecificStatus" disabled>
+              <option value="">Selecione um status</option>
             </select>
           </div>
           <button class="print-btn" id="saveAwbsImageBtn">📸 Salvar imagem PNG</button>

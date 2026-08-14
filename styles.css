@@ -1186,3 +1186,61 @@ select:hover,
     min-height: 126px;
   }
 }
+
+
+/* V7.0 — iMile blue + brighter content surfaces */
+body {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(30,126,255,.28), transparent 36%),
+    linear-gradient(180deg,#0d3d78 0%,#082f61 46%,#06264f 100%);
+}
+
+.topbar {
+  background:linear-gradient(135deg,#1266c4 0%,#0e55a8 48%,#0a4388 100%);
+}
+
+.view-tabs, .filters {
+  background:#164d84;
+}
+
+.view-tab {
+  background:#2c6598;
+}
+
+.view-tab:hover {
+  background:#3777ad;
+}
+
+.panel {
+  background:linear-gradient(145deg,#315f8d,#294f79);
+  border-color:rgba(190,218,250,.38);
+}
+
+.kpi-card {
+  background:linear-gradient(145deg,#3b6d9b,#315c88);
+  border-color:rgba(190,218,250,.42);
+}
+
+select, .multi-select-toggle, .ghost-btn {
+  background:#326b9d;
+  border-color:rgba(195,221,250,.34);
+}
+
+.capture-area {
+  background:
+    radial-gradient(circle at 20% 0%,rgba(68,155,255,.26),transparent 32%),
+    linear-gradient(180deg,#245f98 0%,#194b7e 100%);
+}
+
+#basePrintView .print-kpis {
+  grid-template-columns:repeat(5,minmax(0,1fr));
+}
+
+.awb-toolbar {
+  grid-template-columns:minmax(190px,1fr) minmax(220px,1.2fr) minmax(190px,1fr) minmax(190px,1fr) auto;
+}
+
+@media(max-width:1200px) {
+  .awb-toolbar { grid-template-columns:repeat(2,1fr); }
+  .awb-toolbar .print-btn { grid-column:1 / -1; }
+}
