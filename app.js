@@ -283,9 +283,17 @@ const $ = id => document.getElementById(id);
 const normalize = v => String(v ?? "").trim();
 const lower = v => normalize(v).toLocaleLowerCase("pt-BR");
 
-Chart.defaults.color = "#D7E7F7";
-Chart.defaults.borderColor = "rgba(190,215,240,.18)";
+Chart.defaults.color = "#F2F7FD";
+Chart.defaults.borderColor = "rgba(210,230,248,.28)";
 Chart.defaults.font.family = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
+Chart.defaults.plugins.legend.labels.color = "#F4F8FD";
+Chart.defaults.plugins.legend.labels.font = { weight: "700" };
+Chart.defaults.plugins.tooltip.backgroundColor = "#071F3A";
+Chart.defaults.plugins.tooltip.titleColor = "#FFFFFF";
+Chart.defaults.plugins.tooltip.bodyColor = "#EAF4FF";
+Chart.defaults.plugins.tooltip.borderColor = "rgba(126,180,233,.55)";
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+
 
 function resolveColumn(headers, aliases) {
   const exact = aliases.find(alias => headers.includes(alias));
@@ -524,12 +532,12 @@ function renderBasePerformanceChart() {
   charts.basePerformance=new Chart($("chartBasePerformance"),{
     type:"bar",
     data:{labels:bases,datasets:[
-      {label:"Entregues",data:delivered,backgroundColor:"rgba(53,211,154,.82)",borderRadius:6},
-      {label:"Não entregues",data:notDelivered,backgroundColor:"rgba(255,189,74,.82)",borderRadius:6}
+      {label:"Entregues",data:delivered,backgroundColor:"#22D49B",borderColor:"#78F0C7",borderWidth:1.5,borderRadius:7},
+      {label:"Não entregues",data:notDelivered,backgroundColor:"#FF9F43",borderColor:"#FFD08A",borderWidth:1.5,borderRadius:7}
     ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{
       x:{stacked:false,grid:{display:false}},
-      y:{stacked:false,beginAtZero:true,grid:{color:"rgba(190,215,240,.16)"}}
+      y:{stacked:false,beginAtZero:true,grid:{color:"rgba(215,232,248,.24)"}}
     }}
   });
 }
@@ -601,13 +609,13 @@ function renderHourlyChart() {
   $("hourlyTotal").textContent=`${data.reduce((a,b)=>a+b,0)} baixas`;
   charts.hourly=new Chart($("chartHourly"),{
     type:"line",
-    data:{labels,datasets:[{label:"Baixas",data,fill:true,backgroundColor:"rgba(44,125,255,.14)",borderColor:"#5aa0ff",tension:.28,pointRadius:4,pointHoverRadius:6}]},
+    data:{labels,datasets:[{label:"Baixas",data,fill:true,backgroundColor:"rgba(46,144,255,.30)",borderColor:"#46A3FF",borderWidth:3.5,tension:.28,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:"#9FD0FF",pointBorderColor:"#FFFFFF",pointBorderWidth:1.5}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{
       legend:{display:false},
       tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} baixas`}}
     },scales:{
       x:{grid:{display:false}},
-      y:{beginAtZero:true,ticks:{precision:0},grid:{color:"rgba(190,215,240,.16)"}}
+      y:{beginAtZero:true,ticks:{precision:0},grid:{color:"rgba(215,232,248,.24)"}}
     }}
   });
 }

@@ -1737,3 +1737,60 @@ body .top-bases-table,
 body .awb-master-table {
   color: #082D52 !important;
 }
+
+
+/* ==========================================================
+   V7.4 — Realce dos gráficos do Painel Regional
+   ========================================================== */
+
+body #dashboardView .panel.chart-panel {
+  background: linear-gradient(145deg, #123F73 0%, #092C54 100%) !important;
+  border: 1px solid rgba(103, 178, 247, .70) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 20, 48, .32),
+    inset 0 1px 0 rgba(147, 207, 255, .13) !important;
+}
+
+body #dashboardView .panel.chart-panel .chart-wrap {
+  background: linear-gradient(180deg, #0E3766 0%, #08294E 100%) !important;
+  border: 1px solid rgba(112, 187, 255, .48) !important;
+  box-shadow: inset 0 0 30px rgba(39, 126, 216, .08) !important;
+}
+
+body #dashboardView .panel.chart-panel h2 {
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+}
+
+body #dashboardView .panel.chart-panel .panel-kicker {
+  color: #8CC7FF !important;
+}
+
+body #dashboardView .panel.chart-panel .panel-head > strong {
+  color: #D8EBFF !important;
+}
+
+/* Ranking do Painel Regional também ganha contraste */
+body #dashboardView .panel:not(.chart-panel) {
+  border-color: rgba(79, 141, 194, .44) !important;
+}
+
+body #dashboardView .top-bases-table th {
+  background: #4E86B5 !important;
+  color: #071F3B !important;
+  font-weight: 900 !important;
+}
+
+body #dashboardView .top-bases-table td {
+  font-weight: 700 !important;
+}
+
+/* Linha visual azul forte acima dos gráficos */
+body #dashboardView .chart-panel::before {
+  content: "";
+  display: block;
+  height: 3px;
+  margin: -18px -18px 14px;
+  border-radius: 17px 17px 0 0;
+  background: linear-gradient(90deg, #2B8FFF, #66B8FF);
+}
