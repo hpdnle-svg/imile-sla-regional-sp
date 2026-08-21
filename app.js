@@ -286,8 +286,9 @@ const lower = v => normalize(v).toLocaleLowerCase("pt-BR");
 Chart.defaults.color = "#F2F7FD";
 Chart.defaults.borderColor = "rgba(210,230,248,.28)";
 Chart.defaults.font.family = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
+Chart.defaults.font.size = 14;
 Chart.defaults.plugins.legend.labels.color = "#F4F8FD";
-Chart.defaults.plugins.legend.labels.font = { weight: "700" };
+Chart.defaults.plugins.legend.labels.font = { size: 14, weight: "700" };
 Chart.defaults.plugins.tooltip.backgroundColor = "#071F3A";
 Chart.defaults.plugins.tooltip.titleColor = "#FFFFFF";
 Chart.defaults.plugins.tooltip.bodyColor = "#EAF4FF";
@@ -1030,3 +1031,5 @@ $("saveAwbsImageBtn").addEventListener("click", () => {
     `iMile_AWBs_Pendentes_${base.replaceAll(" ","_")}_${driver.replaceAll(" ","_")}.png`
   );
 });
+Chart.defaults.plugins.tooltip.titleFont = { size: 14, weight: "700" };
+Chart.defaults.plugins.tooltip.bodyFont = { size: 13 };

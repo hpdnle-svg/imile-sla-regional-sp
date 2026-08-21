@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central Operacional iMile</title>
+  <style>
+    :root {
+      --bg1: #0a2f78;
+      --bg2: #123f97;
+      --panel: rgba(255,255,255,.08);
+      --card: #ffffff;
+      --text: #0b2a63;
+      --muted: #6a7a97;
+      --accent: #20c9e8;
+      --accent2: #ffd23f;
+      --shadow: 0 14px 34px rgba(0,0,0,.18);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(32,201,232,.18), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: white;
+    }
+
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 24px 40px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .imile-logo {
+      width: 170px;
+      height: auto;
+      flex: 0 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 10px 12px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.14);
+      overflow: visible;
+    }
+
+    .imile-logo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+
+    .brand p {
+      margin: 8px 0 0;
+      color: rgba(255,255,255,.78);
+      font-size: 15px;
+    }
+
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 24px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(255,255,255,.95);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      display: block;
+      text-decoration: none;
+      color: var(--text);
+      background: var(--card);
+      border-radius: 18px;
+      padding: 18px;
+      min-height: 150px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: auto -28px -34px auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(32,201,232,.18), rgba(255,210,63,.16));
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 32px rgba(0,0,0,.18);
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      background: linear-gradient(135deg, #e7f8ff, #fff8d7);
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 88%;
+    }
+
+    .tag {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: #16517d;
+      background: #e9f8fd;
+      border-radius: 999px;
+      padding: 6px 9px;
+    }
+
+    .footer {
+      text-align: center;
+      color: rgba(255,255,255,.65);
+      font-size: 12px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { padding: 18px 14px 28px; }
+      .header { align-items: flex-start; flex-direction: column; }
+      .brand-row { align-items: flex-start; flex-direction: column; gap: 10px; }
+      .grid { grid-template-columns: 1fr; }
+      .panel { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-row">
+          <div class="imile-logo" aria-label="iMile Delivery"><img src="data:image/png;base64,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" alt="iMile Delivery"></div>
+          <h1>Central Operacional iMile</h1>
+        </div>
+        <p>Acesso rápido de sua operação, dividido sempre por supervisor e as bases de sua regional.</p>
+      </div>
+    </header>
+
+    <main class="panel">
+      <h3 class="section-title">Painéis e relatórios</h3>
+      <div class="grid">
+        <a class="card" target="_blank" rel="noopener" href="https://app.powerbi.com/groups/f40dbb32-220c-4fc5-aa51-6b114fe212cc/reports/68025917-c3d5-4527-9557-86ead2ce9148/14ac02b9860f0f2e8b80?ctid=ed8a7856-b50f-4da4-a2c7-d815dec61eee&experience=power-bi">
+          <span class="tag">Power BI</span>
+          <div class="icon">📊</div>
+          <h2>D0 Painel de SLA + SLA Regional</h2>
+          <p>Consulta rápida do desempenho D0 e visão regional de SLA.</p>
+        </a>
+
+        <a class="card" target="_blank" rel="noopener" href="https://app.powerbi.com/groups/f40dbb32-220c-4fc5-aa51-6b114fe212cc/reports/4c6fd475-6098-42f1-b7e3-8e0d257b7fea/75baab558883edca0670?experience=power-bi">
+          <span class="tag">Power BI</span>
+          <div class="icon">📦</div>
+          <h2>Backlog B.I + BACKLOG DS's</h2>
+          <p>Acompanhamento de backlog operacional e situação dos DS's.</p>
+        </a>
+
+        <a class="card" target="_blank" rel="noopener" href="https://hpdnle-svg.github.io/imile-sla-regional-sp/?utm_source=chatgpt.com">
+          <span class="tag">Web</span>
+          <div class="icon">📈</div>
+          <h2>SLA BASE + SLA Regional</h2>
+          <p>Painel regional com leitura consolidada por base.</p>
+        </a>
+
+        <a class="card" target="_blank" rel="noopener" href="https://hpdnle-svg.github.io/Backlog/">
+          <span class="tag">Web</span>
+          <div class="icon">🗂️</div>
+          <h2>BACKLOG REGIONAL + BACKLOG DS's</h2>
+          <p>Visão regional do backlog com detalhamento operacional.</p>
+        </a>
+
+        <a class="card" target="_blank" rel="noopener" href="https://hpdnle-svg.github.io/REFORM-FD/">
+          <span class="tag">Web</span>
+          <div class="icon">🎯</div>
+          <h2>FD TIKTOK + SLA Regional</h2>
+          <p>Prioridades FD TikTok combinadas com acompanhamento de SLA.</p>
+        </a>
+
+        <a class="card" target="_blank" rel="noopener" href="https://hpdnle-svg.github.io/Performance-mensal/">
+          <span class="tag">Web</span>
+          <div class="icon">🧭</div>
+          <h2>Performance MENSAL + Painel Geral</h2>
+          <p>Visão mensal de performance e indicadores consolidados.</p>
+        </a>
+      </div>
+    </main>
+
+    <div class="footer">Central Operacional iMile • Daniel Coutinho</div>
+  </div>
+</body>
+</html>
