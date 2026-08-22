@@ -1,4 +1,15 @@
-# iMile SLA Regional SP — V9 Design Operacional
+# iMile SLA Regional SP — V10 Conforto Visual
+
+## Novo design V10
+
+- Fundo geral azul-cinza e superfícies azuladas para reduzir o excesso de branco.
+- Contraste reforçado em controles, divisórias, tabelas, rankings e gráficos.
+- Títulos, eixos, legendas e categorias dos gráficos ampliados.
+- Tela de geração de imagem redesenhada com títulos, KPIs, tabela e gráfico maiores.
+- Os três geradores de PNG seguem a mesma identidade visual V10.
+- Exportação PNG em escala 3×, com os gráficos redesenhados em alta densidade antes da captura.
+
+As funções, filtros, cálculos, importação Excel e regras existentes foram preservados.
 
 ## Novo design V9
 - Redesenho completo orientado pela skill oficial `frontend-app-builder` da OpenAI.

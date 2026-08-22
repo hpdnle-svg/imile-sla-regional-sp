@@ -1,0 +1,274 @@
+/* iMile SLA Regional SP — V10 Conforto Visual
+   Camada final de legibilidade: superfícies azuladas, maior contraste e gráficos ampliados. */
+
+.v10 {
+  --v10-page:#dbe6f2;
+  --v10-page-deep:#cfdeed;
+  --v10-surface:#edf4fb;
+  --v10-surface-2:#e5eef8;
+  --v10-surface-3:#f4f8fc;
+  --v10-navy:#001f4d;
+  --v10-navy-2:#073c83;
+  --v10-blue:#0b56c9;
+  --v10-cyan:#25a7e0;
+  --v10-ink:#071d43;
+  --v10-text:#102f5c;
+  --v10-muted:#405b7d;
+  --v10-line:#a9bdd4;
+  --v10-line-soft:#c7d6e6;
+  --v10-green:#087f3d;
+  --v10-red:#cf263d;
+  min-height:100vh;
+  background:linear-gradient(180deg,var(--v10-page) 0%,var(--v10-page-deep) 100%) fixed !important;
+  color:var(--v10-ink) !important;
+  font-size:16px !important;
+}
+
+.v10 .app-shell { background:transparent !important; }
+
+/* Navegação e comandos se destacam do fundo sem depender de branco puro. */
+.v10 .view-tabs {
+  background:#e8f0f9 !important;
+  border-bottom-color:var(--v10-line) !important;
+}
+.v10 .view-tab {
+  color:#17365f !important;
+  font-size:15px !important;
+  font-weight:760 !important;
+}
+.v10 .view-tab:hover { background:#dce9f6 !important; }
+.v10 .view-tab.active { color:var(--v10-blue) !important; background:#f0f6fc !important; }
+
+.v10 .filters,.v10 .print-toolbar,.v10 .awb-toolbar {
+  border:1px solid var(--v10-line) !important;
+  background:var(--v10-surface-2) !important;
+  box-shadow:0 5px 16px rgba(0,42,96,.08) !important;
+}
+.v10 .filter-field>span,.v10 .print-toolbar label,.v10 .awb-toolbar label {
+  color:#18375f !important;
+  font-size:12px !important;
+  font-weight:850 !important;
+}
+.v10 .filters select,.v10 .multi-select-toggle,.v10 .print-toolbar select,.v10 .awb-toolbar select {
+  min-height:46px !important;
+  border:1px solid #8faac7 !important;
+  background:#f7fafe !important;
+  color:#09295a !important;
+  font-size:15px !important;
+  font-weight:650 !important;
+}
+.v10 .ghost-btn,.v10 .print-btn {
+  min-height:46px !important;
+  font-size:15px !important;
+}
+
+/* KPIs: uma faixa azul-clara com números grandes e divisões firmes. */
+.v10 .kpi-grid {
+  border-color:var(--v10-line) !important;
+  background:var(--v10-surface) !important;
+  box-shadow:0 5px 16px rgba(0,42,96,.08) !important;
+}
+.v10 .kpi-card,.v10 .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green),
+.v10 .performance-card.performance-red,.v10 .performance-card.performance-yellow,.v10 .performance-card.performance-green {
+  min-height:122px !important;
+  border-right-color:var(--v10-line) !important;
+  background:linear-gradient(180deg,#f2f7fc 0%,#e8f1fa 100%) !important;
+}
+.v10 .kpi-card span {
+  color:#17365f !important;
+  font-size:13px !important;
+}
+.v10 .kpi-card strong,.v10 .performance-card.performance-red strong,
+.v10 .performance-card.performance-yellow strong,.v10 .performance-card.performance-green strong {
+  font-size:40px !important;
+}
+.v10 .kpi-card small { color:#365577 !important; font-size:14px !important; font-weight:620 !important; }
+
+/* Painel analítico: fundos levemente azulados e limites perceptíveis. */
+.v10 #dashboardView>.chart-grid {
+  border:1px solid var(--v10-line) !important;
+  background:var(--v10-surface) !important;
+  box-shadow:0 5px 18px rgba(0,42,96,.09) !important;
+}
+.v10 #dashboardView>.chart-grid>.panel,.v10 #dashboardView .panel.chart-panel,
+.v10 .panel {
+  padding:18px !important;
+  border-right-color:var(--v10-line) !important;
+  background:var(--v10-surface) !important;
+}
+.v10 .panel-head { min-height:50px !important; border-bottom-color:var(--v10-line) !important; }
+.v10 .panel-kicker {
+  color:#084fae !important;
+  font-size:12px !important;
+  letter-spacing:.055em !important;
+}
+.v10 .panel h2,.v10 .panel-head h2,.v10 #dashboardView .panel.chart-panel h2 {
+  color:var(--v10-ink) !important;
+  font-size:19px !important;
+  line-height:1.25 !important;
+  font-weight:850 !important;
+}
+.v10 .panel-head>strong,.v10 #dashboardView .panel.chart-panel .panel-head>strong {
+  color:#084fae !important;
+  font-size:14px !important;
+}
+.v10 .chart-wrap,.v10 #dashboardView .panel.chart-panel .chart-wrap {
+  min-height:390px !important;
+  margin-top:12px !important;
+  padding:12px !important;
+  border:1px solid #bfd0e2 !important;
+  background:#e8f1fa !important;
+}
+.v10 #dashboardView>.chart-grid:first-of-type .chart-wrap { min-height:410px !important; }
+
+.v10 .table-wrap {
+  border:1px solid #b6c9dc !important;
+  background:#e8f1fa !important;
+}
+.v10 .data-table { background:#eaf2fa !important; }
+.v10 .data-table th {
+  padding:11px 12px !important;
+  border-bottom:3px solid var(--v10-blue) !important;
+  background:#d7e6f5 !important;
+  color:#102f5c !important;
+  font-size:13px !important;
+}
+.v10 .data-table td {
+  padding:11px 12px !important;
+  border-bottom-color:#bfd0e2 !important;
+  background:#f0f6fc !important;
+  color:#102b52 !important;
+  font-size:14px !important;
+  font-weight:620 !important;
+}
+.v10 .data-table tbody tr:nth-child(even) td { background:#e3edf7 !important; }
+.v10 .rank-performance,.v10 .rank-red,.v10 .rank-yellow,.v10 .rank-green { font-size:14px !important; }
+.v10 .rank-row {
+  min-height:44px !important;
+  border-bottom-color:#b9ccdf !important;
+  background:#edf4fb !important;
+}
+.v10 .rank-row:nth-child(even) { background:#e2edf7 !important; }
+.v10 .rank-name { color:#102f5c !important; font-size:14px !important; font-weight:650 !important; }
+.v10 .rank-value { color:#084fae !important; font-size:15px !important; }
+
+/* Tela Gerar Imagem: estrutura própria, legível na tela e na exportação. */
+.v10 .capture-area {
+  padding:26px 30px 22px !important;
+  border:1px solid #91acc9 !important;
+  background:#eaf2fa !important;
+  box-shadow:0 7px 22px rgba(0,42,96,.10) !important;
+}
+.v10 .capture-brand {
+  min-height:62px; margin:-26px -30px 22px !important; padding:10px 26px;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  background:linear-gradient(100deg,var(--v10-navy),var(--v10-navy-2)); color:#fff;
+}
+.v10 .capture-brand strong { color:#fff; font-size:28px; line-height:1; font-weight:900; letter-spacing:-1px; }
+.v10 .capture-brand small { display:block; margin-top:4px; color:#fff; font-size:10px; letter-spacing:0; }
+.v10 .capture-brand span { color:#fff; font-size:21px; font-weight:850; letter-spacing:.035em; }
+.v10 .print-title {
+  min-height:102px !important;
+  padding:0 0 20px !important;
+  border-bottom:2px solid #7f9dbc !important;
+  background:transparent !important;
+}
+.v10 .print-title h2 {
+  color:var(--v10-ink) !important;
+  font-size:34px !important;
+  line-height:1.1 !important;
+}
+.v10 .print-title p,.v10 .print-title strong { color:#17365f !important; font-size:17px !important; font-weight:650 !important; }
+.v10 .print-date { color:var(--v10-blue) !important; font-size:16px !important; }
+.v10 .capture-area .kpi-grid {
+  margin-bottom:20px !important;
+  padding:20px 0 !important;
+  border-bottom:2px solid #9bb3cd !important;
+  background:#e3edf7 !important;
+  box-shadow:none !important;
+}
+.v10 .capture-area .kpi-card {
+  min-height:112px !important;
+  background:transparent !important;
+}
+.v10 .capture-area .kpi-card span { font-size:16px !important; }
+.v10 .capture-area .kpi-card strong { font-size:38px !important; }
+.v10 .capture-area .kpi-card small { font-size:16px !important; }
+.v10 .print-grid {
+  grid-template-columns:1fr 1.08fr !important;
+  border:1px solid #9eb6cf !important;
+  background:#e5eef8 !important;
+}
+.v10 .print-grid>.panel {
+  padding:0 !important;
+  border-right:1px solid #9eb6cf !important;
+  background:#edf4fb !important;
+}
+.v10 .print-grid>.panel:last-child { padding:0 !important; }
+.v10 .print-grid .panel-head {
+  min-height:52px !important;
+  padding:13px 16px 11px !important;
+  border-bottom:0 !important;
+  background:linear-gradient(90deg,var(--v10-navy),var(--v10-navy-2)) !important;
+}
+.v10 .print-grid .panel-head h2,.v10 .print-grid .panel-head .panel-kicker,
+.v10 #basePrintView .panel.chart-panel h2,.v10 #driversPrintView .panel.chart-panel h2,
+.v10 #awbsPendingView .panel.chart-panel h2 { color:#fff !important; }
+.v10 .print-grid .table-wrap { margin:0 !important; border:0 !important; }
+.v10 .print-grid .data-table th {
+  background:var(--v10-blue) !important;
+  color:#fff !important;
+  font-size:16px !important;
+  text-transform:none !important;
+}
+.v10 .print-grid .data-table td { padding:13px 16px !important; font-size:16px !important; }
+.v10 .print-grid .chart-wrap,
+.v10 #basePrintView .panel.chart-panel .chart-wrap,
+.v10 #driversPrintView .panel.chart-panel .chart-wrap,
+.v10 #awbsPendingView .panel.chart-panel .chart-wrap {
+  min-height:430px !important;
+  margin:0 !important;
+  padding:16px !important;
+  border:0 !important;
+  background:#e8f1fa !important;
+}
+
+/* Modo de captura aumenta a hierarquia sem alterar os dados. */
+.v10.saving-image .capture-area { width:1500px !important; max-width:none !important; }
+.v10.saving-image .print-title h2 { font-size:38px !important; }
+.v10.saving-image .print-title p,.v10.saving-image .print-title strong { font-size:19px !important; }
+.v10.saving-image .capture-area .kpi-card span { font-size:18px !important; }
+.v10.saving-image .capture-area .kpi-card strong { font-size:42px !important; }
+.v10.saving-image .capture-area .kpi-card small { font-size:17px !important; }
+.v10.saving-image .print-grid .data-table th { font-size:18px !important; }
+.v10.saving-image .print-grid .data-table td { font-size:18px !important; }
+.v10.saving-image .print-grid .chart-wrap { min-height:470px !important; }
+
+.v10 .awb-summary-grid { border-bottom-color:var(--v10-line) !important; background:#e4eef8 !important; }
+.v10 .awb-summary-card,.v10 .awb-summary-card.drivers,.v10 .awb-summary-card.pending {
+  border-right-color:var(--v10-line) !important;
+  background:#edf4fb !important;
+}
+.v10 .awb-driver-card,.v10 .awb-master-table-wrap { border-color:var(--v10-line) !important; background:#edf4fb !important; }
+.v10 footer { color:#365577 !important; border-top-color:#9fb5cd !important; }
+
+@media(max-width:1200px) {
+  .v10 .chart-wrap,.v10 #dashboardView .panel.chart-panel .chart-wrap { min-height:360px !important; }
+  .v10 .kpi-card strong { font-size:36px !important; }
+}
+
+@media(max-width:820px) {
+  .v10 { font-size:15px !important; }
+  .v10 .panel h2,.v10 .panel-head h2 { font-size:18px !important; }
+  .v10 .capture-area { padding:18px 14px !important; }
+  .v10 .capture-brand { margin:-18px -14px 18px !important; padding:10px 14px; }
+  .v10 .capture-brand strong { font-size:23px; }
+  .v10 .capture-brand span { font-size:16px; }
+  .v10 .print-title h2 { font-size:27px !important; }
+  .v10 .print-grid { grid-template-columns:1fr !important; }
+  .v10 .print-grid>.panel { border-right:0 !important; border-bottom:1px solid var(--v10-line) !important; }
+}
+
+@media print {
+  .v10,.v10 .capture-area { background:#eaf2fa !important; }
+}

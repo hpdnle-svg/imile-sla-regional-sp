@@ -287,12 +287,12 @@ const $ = id => document.getElementById(id);
 const normalize = v => String(v ?? "").trim();
 const lower = v => normalize(v).toLocaleLowerCase("pt-BR");
 
-Chart.defaults.color = "#F2F7FD";
-Chart.defaults.borderColor = "rgba(210,230,248,.28)";
+Chart.defaults.color = "#102F5C";
+Chart.defaults.borderColor = "rgba(29,74,132,.22)";
 Chart.defaults.font.family = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
-Chart.defaults.font.size = 14;
-Chart.defaults.plugins.legend.labels.color = "#F4F8FD";
-Chart.defaults.plugins.legend.labels.font = { size: 14, weight: "700" };
+Chart.defaults.font.size = 16;
+Chart.defaults.plugins.legend.labels.color = "#102F5C";
+Chart.defaults.plugins.legend.labels.font = { size: 16, weight: "700" };
 Chart.defaults.plugins.tooltip.backgroundColor = "#071F3A";
 Chart.defaults.plugins.tooltip.titleColor = "#FFFFFF";
 Chart.defaults.plugins.tooltip.bodyColor = "#EAF4FF";
@@ -540,9 +540,9 @@ function renderBasePerformanceChart() {
       {label:"Entregues",data:delivered,backgroundColor:"#0B56C9",borderColor:"#0B56C9",borderWidth:1.5,borderRadius:7},
       {label:"Não entregues",data:notDelivered,backgroundColor:"#DF3447",borderColor:"#DF3447",borderWidth:1.5,borderRadius:7}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:8}},plugins:{legend:{position:"top",align:"center",labels:{boxWidth:10,boxHeight:10,padding:16}}},scales:{
-      x:{stacked:false,grid:{display:false},ticks:{display:true,autoSkip:false,color:"#08275D",font:{size:12,weight:"700"},minRotation:35,maxRotation:35,padding:8}},
-      y:{stacked:false,beginAtZero:true,ticks:{display:true,color:"#38577C",precision:0},grid:{color:"rgba(22,76,145,.12)"}}
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:10}},plugins:{legend:{position:"top",align:"center",labels:{boxWidth:13,boxHeight:13,padding:20,font:{size:16,weight:"700"}}}},scales:{
+      x:{stacked:false,grid:{display:false},ticks:{display:true,autoSkip:false,color:"#102F5C",font:{size:15,weight:"700"},minRotation:25,maxRotation:25,padding:10}},
+      y:{stacked:false,beginAtZero:true,ticks:{display:true,color:"#244A78",font:{size:15,weight:"650"},precision:0,padding:8},grid:{color:"rgba(29,74,132,.18)",lineWidth:1.2}}
     }}
   });
 }
@@ -612,13 +612,13 @@ function renderHourlyChart() {
   $("hourlyTotal").textContent=`${data.reduce((a,b)=>a+b,0)} baixas`;
   charts.hourly=new Chart($("chartHourly"),{
     type:"line",
-    data:{labels,datasets:[{label:"Baixas",data,fill:true,backgroundColor:"rgba(11,86,201,.12)",borderColor:"#0B56C9",borderWidth:3.5,tension:.28,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:"#24A9E8",pointBorderColor:"#FFFFFF",pointBorderWidth:1.5}]},
+    data:{labels,datasets:[{label:"Baixas",data,fill:true,backgroundColor:"rgba(11,86,201,.14)",borderColor:"#0B56C9",borderWidth:4,tension:.28,pointRadius:6,pointHoverRadius:8,pointBackgroundColor:"#0B56C9",pointBorderColor:"#EAF3FC",pointBorderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{
       legend:{display:false},
       tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} baixas`}}
     },scales:{
-      x:{grid:{display:false},ticks:{display:true,autoSkip:false,color:"#08275D",font:{size:10,weight:"700"},minRotation:45,maxRotation:45,padding:7}},
-      y:{beginAtZero:true,ticks:{display:true,color:"#38577C",precision:0},grid:{color:"rgba(22,76,145,.12)"}}
+      x:{grid:{display:false},ticks:{display:true,autoSkip:false,color:"#102F5C",font:{size:14,weight:"700"},minRotation:35,maxRotation:35,padding:9}},
+      y:{beginAtZero:true,ticks:{display:true,color:"#244A78",font:{size:15,weight:"650"},precision:0,padding:8},grid:{color:"rgba(29,74,132,.18)",lineWidth:1.2}}
     }}
   });
 }
@@ -657,9 +657,10 @@ function renderBasePrint(base) {
   destroyChart("printBaseStatus");
   charts.printBaseStatus=new Chart($("chartPrintBaseStatus"),{
     type:"bar",
-    data:{labels:statuses.map(x=>x[0]),datasets:[{label:"Quantidade",data:statuses.map(x=>x[1]),backgroundColor:"rgba(44,125,255,.78)",borderRadius:6}]},
-    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
-      x:{beginAtZero:true,ticks:{precision:0}},y:{grid:{display:false}}
+    data:{labels:statuses.map(x=>x[0]),datasets:[{label:"Quantidade",data:statuses.map(x=>x[1]),backgroundColor:"#0B56C9",borderColor:"#073C83",borderWidth:1.5,borderRadius:4,barThickness:24,maxBarThickness:30}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,layout:{padding:{right:18}},plugins:{legend:{display:false}},scales:{
+      x:{beginAtZero:true,ticks:{precision:0,color:"#244A78",font:{size:16,weight:"650"},padding:8},grid:{color:"rgba(29,74,132,.18)",lineWidth:1.2}},
+      y:{grid:{display:false},ticks:{color:"#102F5C",font:{size:17,weight:"700"},padding:10}}
     }}
   });
 }
@@ -975,16 +976,27 @@ $("awbDriverSelect").addEventListener("change", e => {
 async function saveAreaAsPng(areaId, filename) {
   const area = $(areaId);
   if (!area) return;
+  const areaCharts = [...area.querySelectorAll("canvas")]
+    .map(canvas => Chart.getChart(canvas))
+    .filter(Boolean);
+  const previousRatios = areaCharts.map(chart => chart.options.devicePixelRatio);
 
   try {
     document.body.classList.add("saving-image");
 
+    // Redesenha os gráficos em alta densidade antes da captura.
+    areaCharts.forEach(chart => {
+      chart.options.devicePixelRatio = 3;
+      chart.resize();
+      chart.update("none");
+    });
+
     // Chart.js redraws can be sensitive to capture timing.
-    await new Promise(resolve => setTimeout(resolve, 120));
+    await new Promise(resolve => setTimeout(resolve, 220));
 
     const canvas = await html2canvas(area, {
-      backgroundColor: "#f3f7fc",
-      scale: 2,
+      backgroundColor: "#EAF2FA",
+      scale: 3,
       useCORS: true,
       logging: false,
       windowWidth: area.scrollWidth,
@@ -999,6 +1011,11 @@ async function saveAreaAsPng(areaId, filename) {
     console.error(err);
     alert("Não foi possível gerar a imagem. Tente novamente.");
   } finally {
+    areaCharts.forEach((chart, index) => {
+      chart.options.devicePixelRatio = previousRatios[index];
+      chart.resize();
+      chart.update("none");
+    });
     document.body.classList.remove("saving-image");
   }
 }
