@@ -1,4 +1,11 @@
-# iMile SLA Regional SP — V7.5
+# iMile SLA Regional SP — V8 Visual Executivo
+
+## Identidade visual V8
+- Cabeçalho executivo azul iMile com marca, título central, supervisor e última atualização.
+- Fundo claro, cards brancos e números em azul-marinho para facilitar a leitura.
+- Abas, filtros, botões, tabelas e gráficos padronizados com a identidade da planilha FD TIKTOK.
+- Telas de Resumo por Base, Motoristas Ofensores e AWBs Pendentes preparadas para exportação em PNG no mesmo padrão visual.
+- Cálculos, filtros, importação do Excel e regras operacionais da V7.5 foram preservados.
 
 ## Alterações principais
 - Mantido o painel regional.

@@ -4,23 +4,47 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>iMile SLA Regional SP</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=8" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style id="v8-critical-theme">
+    html body { background:#edf3fb !important; color:#08275d !important; }
+    body .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green),
+    body .performance-card.performance-red,body .performance-card.performance-yellow,body .performance-card.performance-green,
+    body .awb-summary-card { background:#fff !important; background-image:none !important; border-color:#d8e3f1 !important; color:#08275d !important; }
+    body #dashboardView .panel.chart-panel,body .panel.chart-panel,body .panel {
+      background:#fff !important; background-image:none !important; border-color:#d8e3f1 !important; color:#08275d !important;
+    }
+    body #dashboardView .panel.chart-panel .chart-wrap,body .panel.chart-panel .chart-wrap,body .chart-wrap {
+      background:#fbfdff !important; background-image:none !important;
+    }
+    body #dashboardView .panel.chart-panel h2,body #dashboardView .panel.chart-panel .panel-head>strong,
+    body #dashboardView .panel.chart-panel .panel-kicker { color:#08275d !important; }
+    body #dashboardView .panel.chart-panel .panel-kicker { color:#0b56c9 !important; }
+    @media(min-width:1201px){
+      body .topbar { grid-template-columns:185px minmax(0,1fr) 330px !important; }
+      body .topbar h1 { font-size:clamp(28px,2.7vw,46px) !important; }
+    }
+  </style>
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <div>
-        <div class="eyebrow">Supervisor: <strong id="supervisorName">Não definido</strong></div>
-        <h1>iMile SLA Regional SP</h1>
+      <div class="brand-lockup" aria-label="iMile Delivery">
+        <div class="brand-mark"><i></i><b>iMile</b></div>
+        <span>Delivery</span>
+      </div>
+      <div class="headline-lockup">
+        <div class="operation-label">REGIONAL SP OPERATIONS</div>
+        <h1>ACOMPANHAMENTO <em>SLA REGIONAL SP</em></h1>
         <p class="subtitle">Painel operacional de SLA, volume e performance</p>
+        <div class="supervisor-pill">SUPERVISOR: <strong id="supervisorName">Não definido</strong></div>
       </div>
       <div class="header-actions">
         <label class="upload-btn no-print">
           <input id="fileInput" type="file" accept=".xlsx,.xls" hidden />
-          <span>📂 Importar Excel</span>
+          <span>Importar Excel</span>
         </label>
         <div class="update-box">
           <span>Última atualização</span>
@@ -364,10 +388,10 @@
     </main>
 
     <footer class="no-print">
-      iMile SLA Regional SP • V5 • Leitura local do Excel no navegador
+      iMile SLA Regional SP • V8 Visual Executivo • Leitura local do Excel no navegador
     </footer>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

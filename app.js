@@ -1,3 +1,7 @@
+Chart.defaults.color = "#12366a";
+Chart.defaults.font.family = "Inter, Segoe UI, Arial, sans-serif";
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+
 const FIELD_ALIASES = {
   tracking: ["Número da Etiqueta", "Numero da Etiqueta", "Tracking Number", "Waybill", "AWB"],
   status: ["Último status", "Ultimo status", "Status"],
@@ -533,12 +537,12 @@ function renderBasePerformanceChart() {
   charts.basePerformance=new Chart($("chartBasePerformance"),{
     type:"bar",
     data:{labels:bases,datasets:[
-      {label:"Entregues",data:delivered,backgroundColor:"#22D49B",borderColor:"#78F0C7",borderWidth:1.5,borderRadius:7},
-      {label:"Não entregues",data:notDelivered,backgroundColor:"#FF9F43",borderColor:"#FFD08A",borderWidth:1.5,borderRadius:7}
+      {label:"Entregues",data:delivered,backgroundColor:"#0B56C9",borderColor:"#0B56C9",borderWidth:1.5,borderRadius:7},
+      {label:"Não entregues",data:notDelivered,backgroundColor:"#AFCBEF",borderColor:"#7AA8E3",borderWidth:1.5,borderRadius:7}
     ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{
       x:{stacked:false,grid:{display:false}},
-      y:{stacked:false,beginAtZero:true,grid:{color:"rgba(215,232,248,.24)"}}
+      y:{stacked:false,beginAtZero:true,grid:{color:"rgba(22,76,145,.12)"}}
     }}
   });
 }
@@ -610,13 +614,13 @@ function renderHourlyChart() {
   $("hourlyTotal").textContent=`${data.reduce((a,b)=>a+b,0)} baixas`;
   charts.hourly=new Chart($("chartHourly"),{
     type:"line",
-    data:{labels,datasets:[{label:"Baixas",data,fill:true,backgroundColor:"rgba(46,144,255,.30)",borderColor:"#46A3FF",borderWidth:3.5,tension:.28,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:"#9FD0FF",pointBorderColor:"#FFFFFF",pointBorderWidth:1.5}]},
+    data:{labels,datasets:[{label:"Baixas",data,fill:true,backgroundColor:"rgba(11,86,201,.12)",borderColor:"#0B56C9",borderWidth:3.5,tension:.28,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:"#24A9E8",pointBorderColor:"#FFFFFF",pointBorderWidth:1.5}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{
       legend:{display:false},
       tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} baixas`}}
     },scales:{
       x:{grid:{display:false}},
-      y:{beginAtZero:true,ticks:{precision:0},grid:{color:"rgba(215,232,248,.24)"}}
+      y:{beginAtZero:true,ticks:{precision:0},grid:{color:"rgba(22,76,145,.12)"}}
     }}
   });
 }
@@ -981,7 +985,7 @@ async function saveAreaAsPng(areaId, filename) {
     await new Promise(resolve => setTimeout(resolve, 120));
 
     const canvas = await html2canvas(area, {
-      backgroundColor: "#07101f",
+      backgroundColor: "#f3f7fc",
       scale: 2,
       useCORS: true,
       logging: false,
