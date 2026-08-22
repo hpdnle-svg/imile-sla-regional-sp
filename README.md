@@ -1,4 +1,18 @@
-# iMile SLA Regional SP — V8 Visual Executivo
+# iMile SLA Regional SP — V9 Design Operacional
+
+## Novo design V9
+- Redesenho completo orientado pela skill oficial `frontend-app-builder` da OpenAI.
+- Cabeçalho mais compacto e funcional, com foco na operação em vez de uma abertura promocional.
+- Navegação por abas com hierarquia mais limpa e estado ativo por sublinhado azul.
+- KPIs reunidos em uma única faixa analítica, reduzindo caixas e ruído visual.
+- Gráficos, ranking e ocorrências integrados em uma área contínua de análise.
+- Relatórios de Base, Motoristas e AWBs com estrutura editorial preparada para exportação PNG.
+- Paleta iMile preservada: azul-marinho, azul iMile, branco e amarelo apenas como destaque.
+- Todas as funções, cálculos, filtros, importação Excel e exportações foram mantidos.
+
+## Correção V8.1 — Eixos dos gráficos
+- O gráfico `Entregue x Não Entregue por Base` agora mantém todos os nomes das bases visíveis no eixo inferior, com rotação para evitar cortes.
+- O gráfico `Baixas por Hora` agora mostra permanentemente as 24 referências, de `00:00` a `23:00`, inclusive nas horas sem entregas.
 
 ## Identidade visual V8
 - Cabeçalho executivo azul iMile com marca, título central, supervisor e última atualização.

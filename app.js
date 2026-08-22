@@ -538,11 +538,11 @@ function renderBasePerformanceChart() {
     type:"bar",
     data:{labels:bases,datasets:[
       {label:"Entregues",data:delivered,backgroundColor:"#0B56C9",borderColor:"#0B56C9",borderWidth:1.5,borderRadius:7},
-      {label:"Não entregues",data:notDelivered,backgroundColor:"#AFCBEF",borderColor:"#7AA8E3",borderWidth:1.5,borderRadius:7}
+      {label:"Não entregues",data:notDelivered,backgroundColor:"#DF3447",borderColor:"#DF3447",borderWidth:1.5,borderRadius:7}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}},scales:{
-      x:{stacked:false,grid:{display:false}},
-      y:{stacked:false,beginAtZero:true,grid:{color:"rgba(22,76,145,.12)"}}
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{bottom:8}},plugins:{legend:{position:"top",align:"center",labels:{boxWidth:10,boxHeight:10,padding:16}}},scales:{
+      x:{stacked:false,grid:{display:false},ticks:{display:true,autoSkip:false,color:"#08275D",font:{size:12,weight:"700"},minRotation:35,maxRotation:35,padding:8}},
+      y:{stacked:false,beginAtZero:true,ticks:{display:true,color:"#38577C",precision:0},grid:{color:"rgba(22,76,145,.12)"}}
     }}
   });
 }
@@ -606,11 +606,9 @@ function renderHourlyChart() {
   const delivered=filteredRows.filter(isDelivered);
   const hours=Array.from({length:24},(_,i)=>i);
   const values=hours.map(h=>delivered.filter(r=>hourFromValue(r.deliveryTime)===h).length);
-  const first=values.findIndex(v=>v>0);
-  let last=values.length-1; while(last>=0 && values[last]===0) last--;
-  const start=first>=0?Math.max(0,first-1):0, end=last>=0?Math.min(23,last+1):23;
-  const labels=hours.slice(start,end+1).map(h=>`${String(h).padStart(2,"0")}:00`);
-  const data=values.slice(start,end+1);
+  // Mantém as 24 horas visíveis como referência, mesmo quando não há baixas.
+  const labels=hours.map(h=>`${String(h).padStart(2,"0")}:00`);
+  const data=values;
   $("hourlyTotal").textContent=`${data.reduce((a,b)=>a+b,0)} baixas`;
   charts.hourly=new Chart($("chartHourly"),{
     type:"line",
@@ -619,8 +617,8 @@ function renderHourlyChart() {
       legend:{display:false},
       tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} baixas`}}
     },scales:{
-      x:{grid:{display:false}},
-      y:{beginAtZero:true,ticks:{precision:0},grid:{color:"rgba(22,76,145,.12)"}}
+      x:{grid:{display:false},ticks:{display:true,autoSkip:false,color:"#08275D",font:{size:10,weight:"700"},minRotation:45,maxRotation:45,padding:7}},
+      y:{beginAtZero:true,ticks:{display:true,color:"#38577C",precision:0},grid:{color:"rgba(22,76,145,.12)"}}
     }}
   });
 }

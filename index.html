@@ -27,8 +27,9 @@
       body .topbar h1 { font-size:clamp(28px,2.7vw,46px) !important; }
     }
   </style>
+  <link rel="stylesheet" href="design-v9.css?v=9" />
 </head>
-<body>
+<body class="v9">
   <div class="app-shell">
     <header class="topbar">
       <div class="brand-lockup" aria-label="iMile Delivery">
@@ -36,20 +37,21 @@
         <span>Delivery</span>
       </div>
       <div class="headline-lockup">
-        <div class="operation-label">REGIONAL SP OPERATIONS</div>
-        <h1>ACOMPANHAMENTO <em>SLA REGIONAL SP</em></h1>
+        <h1>SLA REGIONAL SP</h1>
         <p class="subtitle">Painel operacional de SLA, volume e performance</p>
-        <div class="supervisor-pill">SUPERVISOR: <strong id="supervisorName">Não definido</strong></div>
       </div>
       <div class="header-actions">
+        <div class="header-meta">
+          <div class="supervisor-pill">Supervisor: <strong id="supervisorName">Não definido</strong></div>
+          <div class="update-box">
+            <span>Última atualização</span>
+            <strong id="lastUpdate">Nenhum arquivo</strong>
+          </div>
+        </div>
         <label class="upload-btn no-print">
           <input id="fileInput" type="file" accept=".xlsx,.xls" hidden />
           <span>Importar Excel</span>
         </label>
-        <div class="update-box">
-          <span>Última atualização</span>
-          <strong id="lastUpdate">Nenhum arquivo</strong>
-        </div>
       </div>
     </header>
 
@@ -62,27 +64,33 @@
 
     <main>
       <section class="filters no-print enhanced-filters">
-        <select id="filterSupervisor">
-          <option value="">Todos os supervisores</option>
-        </select>
+        <label class="filter-field">
+          <span>Supervisor</span>
+          <select id="filterSupervisor">
+            <option value="">Todos os supervisores</option>
+          </select>
+        </label>
 
-        <div class="multi-select" id="baseMultiSelect">
-          <button type="button" class="multi-select-toggle" id="baseMultiToggle">
-            <span id="baseMultiLabel">Todas as bases</span>
-            <span>▾</span>
-          </button>
-          <div class="multi-select-menu" id="baseMultiMenu">
-            <div class="multi-select-actions">
-              <button type="button" id="selectAllBases">Marcar todas</button>
-              <button type="button" id="clearAllBases">Limpar</button>
+        <div class="filter-field">
+          <span>Bases</span>
+          <div class="multi-select" id="baseMultiSelect">
+            <button type="button" class="multi-select-toggle" id="baseMultiToggle">
+              <span id="baseMultiLabel">Todas as bases</span>
+              <span>▾</span>
+            </button>
+            <div class="multi-select-menu" id="baseMultiMenu">
+              <div class="multi-select-actions">
+                <button type="button" id="selectAllBases">Marcar todas</button>
+                <button type="button" id="clearAllBases">Limpar</button>
+              </div>
+              <div id="baseCheckboxList" class="base-checkbox-list"></div>
             </div>
-            <div id="baseCheckboxList" class="base-checkbox-list"></div>
           </div>
         </div>
 
-        <select id="filterDsp"><option value="">Todos os DSPs</option></select>
-        <select id="filterDriver"><option value="">Todos os motoristas</option></select>
-        <select id="filterStatus"><option value="">Todos os status</option></select>
+        <label class="filter-field"><span>DSPs</span><select id="filterDsp"><option value="">Todos os DSPs</option></select></label>
+        <label class="filter-field"><span>Motoristas</span><select id="filterDriver"><option value="">Todos os motoristas</option></select></label>
+        <label class="filter-field"><span>Status</span><select id="filterStatus"><option value="">Todos os status</option></select></label>
         <button id="clearFilters" class="ghost-btn">Limpar filtros</button>
       </section>
 
@@ -388,10 +396,10 @@
     </main>
 
     <footer class="no-print">
-      iMile SLA Regional SP • V8 Visual Executivo • Leitura local do Excel no navegador
+      iMile SLA Regional SP • V9 Design Operacional • Leitura local do Excel no navegador
     </footer>
   </div>
 
-  <script src="app.js?v=8"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>
