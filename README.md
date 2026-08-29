@@ -1,36 +1,4 @@
-# iMile SLA Regional SP — V10 Conforto Visual
-
-## Novo design V10
-
-- Fundo geral azul-cinza e superfícies azuladas para reduzir o excesso de branco.
-- Contraste reforçado em controles, divisórias, tabelas, rankings e gráficos.
-- Títulos, eixos, legendas e categorias dos gráficos ampliados.
-- Tela de geração de imagem redesenhada com títulos, KPIs, tabela e gráfico maiores.
-- Os três geradores de PNG seguem a mesma identidade visual V10.
-- Exportação PNG em escala 3×, com os gráficos redesenhados em alta densidade antes da captura.
-
-As funções, filtros, cálculos, importação Excel e regras existentes foram preservados.
-
-## Novo design V9
-- Redesenho completo orientado pela skill oficial `frontend-app-builder` da OpenAI.
-- Cabeçalho mais compacto e funcional, com foco na operação em vez de uma abertura promocional.
-- Navegação por abas com hierarquia mais limpa e estado ativo por sublinhado azul.
-- KPIs reunidos em uma única faixa analítica, reduzindo caixas e ruído visual.
-- Gráficos, ranking e ocorrências integrados em uma área contínua de análise.
-- Relatórios de Base, Motoristas e AWBs com estrutura editorial preparada para exportação PNG.
-- Paleta iMile preservada: azul-marinho, azul iMile, branco e amarelo apenas como destaque.
-- Todas as funções, cálculos, filtros, importação Excel e exportações foram mantidos.
-
-## Correção V8.1 — Eixos dos gráficos
-- O gráfico `Entregue x Não Entregue por Base` agora mantém todos os nomes das bases visíveis no eixo inferior, com rotação para evitar cortes.
-- O gráfico `Baixas por Hora` agora mostra permanentemente as 24 referências, de `00:00` a `23:00`, inclusive nas horas sem entregas.
-
-## Identidade visual V8
-- Cabeçalho executivo azul iMile com marca, título central, supervisor e última atualização.
-- Fundo claro, cards brancos e números em azul-marinho para facilitar a leitura.
-- Abas, filtros, botões, tabelas e gráficos padronizados com a identidade da planilha FD TIKTOK.
-- Telas de Resumo por Base, Motoristas Ofensores e AWBs Pendentes preparadas para exportação em PNG no mesmo padrão visual.
-- Cálculos, filtros, importação do Excel e regras operacionais da V7.5 foram preservados.
+# iMile SLA Regional SP — V7.5
 
 ## Alterações principais
 - Mantido o painel regional.
