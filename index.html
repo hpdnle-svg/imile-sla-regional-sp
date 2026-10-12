@@ -5,32 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>iMile SLA Regional SP</title>
   <link rel="stylesheet" href="styles.css?v=8" />
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <style id="v8-critical-theme">
-    html body { background:#edf3fb !important; color:#08275d !important; }
-    body .kpi-card:not(.performance-red):not(.performance-yellow):not(.performance-green),
-    body .performance-card.performance-red,body .performance-card.performance-yellow,body .performance-card.performance-green,
-    body .awb-summary-card { background:#fff !important; background-image:none !important; border-color:#d8e3f1 !important; color:#08275d !important; }
-    body #dashboardView .panel.chart-panel,body .panel.chart-panel,body .panel {
-      background:#fff !important; background-image:none !important; border-color:#d8e3f1 !important; color:#08275d !important;
-    }
-    body #dashboardView .panel.chart-panel .chart-wrap,body .panel.chart-panel .chart-wrap,body .chart-wrap {
-      background:#fbfdff !important; background-image:none !important;
-    }
-    body #dashboardView .panel.chart-panel h2,body #dashboardView .panel.chart-panel .panel-head>strong,
-    body #dashboardView .panel.chart-panel .panel-kicker { color:#08275d !important; }
-    body #dashboardView .panel.chart-panel .panel-kicker { color:#0b56c9 !important; }
-    @media(min-width:1201px){
-      body .topbar { grid-template-columns:185px minmax(0,1fr) 330px !important; }
-      body .topbar h1 { font-size:clamp(28px,2.7vw,46px) !important; }
-    }
-  </style>
-  <link rel="stylesheet" href="design-v9.css?v=9" />
-  <link rel="stylesheet" href="design-v10.css?v=10" />
-</head>
-<body class="v9 v10">
+  <script src="xlsx.js"></script>
+  <script src="chart.js"></script>
+  <script src="html2canvas.js"></script>
+<link rel="stylesheet" href="design-v9.css?v=9" />
+  <link rel="stylesheet" href="design-v11.css?v=11" /><link rel="stylesheet" href="design-v12.css?v=12" />
+<link rel="stylesheet" href="fifo.css?v=13" /></head>
+<body class="v9 v11 v12">
   <div class="app-shell">
     <header class="topbar">
       <div class="brand-lockup" aria-label="iMile Delivery">
@@ -60,10 +41,25 @@
       <button class="view-tab active" data-view="dashboard">Painel Regional</button>
       <button class="view-tab" data-view="baseprint">Resumo por Base</button>
       <button class="view-tab" data-view="driversprint">Motoristas Ofensores</button>
-      <button class="view-tab" data-view="awbspending">AWBs Pendentes</button>
+      <button class="view-tab" data-view="awbspending">FIFO</button>
     </nav>
 
     <main>
+      <details class="cloud-panel no-print" aria-label="Sincronização entre dispositivos">
+        <summary><span class="cloud-summary-title">Sincronização entre computador e celular</span><span id="cloudStatus" role="status" aria-live="polite">Verificando conexão…</span></summary>
+        <form id="cloudLogin" class="cloud-actions">
+          <label>E-mail<input id="cloudEmail" type="email" autocomplete="username" required placeholder="Sua conta do painel" /></label>
+          <label>Senha<input id="cloudPassword" type="password" autocomplete="current-password" required placeholder="Sua senha" /></label>
+          <button type="submit" class="print-btn">Entrar e sincronizar</button><button id="cloudForgotPassword" type="button" class="ghost-btn">Esqueci minha senha</button>
+        </form>
+        <div id="cloudConnected" class="cloud-actions" hidden>
+          <button id="cloudSave" class="print-btn" type="button">Salvar relatório online</button>
+          <button id="cloudRefresh" class="ghost-btn" type="button">Abrir mais recente</button>
+          <label>Histórico<select id="cloudHistory"><option value="">Histórico de relatórios</option></select></label>
+          <button id="cloudLogout" class="ghost-btn" type="button">Sair da conta</button>
+        </div>
+      </details>
+
       <section class="filters no-print enhanced-filters">
         <label class="filter-field">
           <span>Supervisor</span>
@@ -184,7 +180,8 @@
             </div>
           </article>
         </section>
-      </section>
+      <aside class="operational-banner"><div class="alert-mark" aria-hidden="true">!</div><div><h2><em>ATENÇÃO ÀS PENDÊNCIAS.</em> Transforme os indicadores em ação.</h2><p>Identifique as bases e os motoristas ofensores, acompanhe os AWBs pendentes e priorize a finalização das entregas.</p></div></aside>
+</section>
 
       <section id="basePrintView" class="view print-sheet">
         <div class="print-toolbar no-print">
@@ -330,8 +327,8 @@
       <section id="awbsPendingView" class="view print-sheet">
         <div class="print-toolbar no-print awb-toolbar">
           <div>
-            <label>1. Base para cobrança</label>
-            <select id="awbBaseSelect"><option value="">Selecione uma base</option></select>
+            <label>1. Base / DS</label>
+            <select id="awbBaseSelect"><option value="">Todas as bases</option></select>
           </div>
           <div>
             <label>2. Motorista da base</label>
@@ -340,8 +337,8 @@
             </select>
           </div>
           <div>
-            <label>3. O que deseja cobrar?</label>
-            <select id="awbChargeType" disabled>
+            <label>3. Coluna de entrada na base</label><select id="fifoDateColumn"><option value="">Selecione a coluna de entrada na base</option></select><label hidden>Filtro anterior</label>
+            <select id="awbChargeType" disabled hidden>
               <option value="route">Em rota</option>
               <option value="pending">Todos os pendentes</option>
               <option value="notdelivered">Não entregues</option>
@@ -361,7 +358,7 @@
         <div class="capture-brand"><strong>iMile <small>Delivery</small></strong><span>SLA REGIONAL SP</span></div>
           <div class="print-title">
             <div>
-              <span class="panel-kicker">AWBs Pendentes</span>
+              <span class="panel-kicker">FIFO • Primeiro que entra, primeiro que sai</span>
               <h2 id="awbPrintTitle">Selecione uma base</h2>
               <p>Supervisor: <strong id="awbPrintSupervisor">Não definido</strong> • Motorista: <strong id="awbPrintDriver">Todos</strong></p>
             </div>
@@ -376,17 +373,17 @@
             </article>
 
             <article class="awb-summary-card pending">
-              <span>AWBs Pendentes</span>
+              <span>Pedidos com mais de 3 dias</span>
               <strong id="awbPendingCount">--</strong>
-              <small>AWBs</small>
+              <small>saída e entrega prioritárias hoje</small>
             </article>
-          </section>
+          <article class="awb-summary-card"><span>Mais antigo na base</span><strong id="fifoOldest">—</strong><small>tempo desde a entrada</small></article><article class="awb-summary-card"><span>Sem data válida</span><strong id="fifoUnclassified">—</strong><small>pendências a conferir</small></article></section>
 
-          <article class="panel awb-panel">
+          <div class="fifo-banner"><span class="fifo-symbol" aria-hidden="true">FIFO</span><div><strong>PRIMEIRO QUE ENTRA, PRIMEIRO QUE SAI.</strong><p>Pedidos com mais de 3 dias na base devem sair primeiro, impreterivelmente, e ser entregues até o final do dia. Priorize a separação, a expedição e o acompanhamento com os motoristas.</p></div></div><p id="fifoDateNotice" class="fifo-notice"></p><article class="panel awb-panel">
             <div class="panel-head">
               <div>
-                <span class="panel-kicker">Cobrança Operacional</span>
-                <h2>Motoristas e AWBs que ainda faltam entregar</h2>
+                <span class="panel-kicker">Expedição prioritária</span>
+                <h2>Fila de prioridade • pedidos mais antigos primeiro</h2>
               </div>
             </div>
 
@@ -400,10 +397,24 @@
     </main>
 
     <footer class="no-print">
-      iMile SLA Regional SP • V10 Conforto Visual • Leitura local do Excel no navegador
+      iMile SLA Regional SP • V15 • SLA Regional / FIFO • Leitura local do Excel no navegador
     </footer>
   </div>
 
-  <script src="app.js?v=10"></script>
+  <script src="percentages.js?v=14"></script><script src="presentation.js?v=12"></script><script src="app.js?v=14"></script><script src="fifo.js?v=13.2"></script><script src="supabase.js"></script><script src="cloud-config.js"></script><script src="cloud.js?v=15"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

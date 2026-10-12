@@ -228,11 +228,11 @@ const $ = id => document.getElementById(id);
 const normalize = v => String(v ?? "").trim();
 const lower = v => normalize(v).toLocaleLowerCase("pt-BR");
 
-Chart.defaults.color = "#F2F7FD";
-Chart.defaults.borderColor = "rgba(210,230,248,.28)";
+Chart.defaults.color = "#3b5680";
+Chart.defaults.borderColor = "rgba(133,156,184,.16)";
 Chart.defaults.font.family = 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif';
 Chart.defaults.font.size = 14;
-Chart.defaults.plugins.legend.labels.color = "#F4F8FD";
+Chart.defaults.plugins.legend.labels.color = "#3b5680";
 Chart.defaults.plugins.legend.labels.font = { size: 14, weight: "700" };
 Chart.defaults.plugins.tooltip.backgroundColor = "#071F3A";
 Chart.defaults.plugins.tooltip.titleColor = "#FFFFFF";
@@ -312,7 +312,7 @@ function populateFilters() {
 
   fillSelect("printBaseSelect", bases, "Selecione uma base");
   fillSelect("driverBaseSelect", bases, "Selecione uma base");
-  fillSelect("awbBaseSelect", bases, "Selecione uma base");
+  fillSelect("awbBaseSelect", bases, "Todas as bases");
 
   fillSelect("filterDsp", uniqueSorted(rawRows,"dsp"), "Todos os DSPs");
   fillSelect("filterDriver", uniqueSorted(rawRows,"driver"), "Todos os motoristas");
@@ -393,7 +393,7 @@ function syncDependentBaseSelectors() {
 
   fillSelect("printBaseSelect", bases, "Selecione uma base");
   fillSelect("driverBaseSelect", bases, "Selecione uma base");
-  fillSelect("awbBaseSelect", bases, "Selecione uma base");
+  fillSelect("awbBaseSelect", bases, "Todas as bases");
 
   if ($("awbBaseSelect").value && !bases.includes($("awbBaseSelect").value)) {
     $("awbBaseSelect").value = "";
@@ -431,6 +431,7 @@ function applyFilters() {
 
   $("supervisorName").textContent = f.supervisor || "Regional SP";
   renderDashboard();
+  if (typeof renderFIFO === "function" && activeView === "awbspending") renderFIFO($("awbBaseSelect").value, $("awbDriverSelect").value);
 
   // Mantém a aba AWBs sincronizada quando existe somente uma base ativa.
   const preferred = preferredBaseFromMainPanel();
@@ -461,7 +462,7 @@ function renderKpis() {
   const card = $("performanceCard");
   card.classList.remove("performance-red","performance-yellow","performance-green");
 
-  if (performance < 80) {
+  if (performance < 85) {
     card.classList.add("performance-red");
   } else if (performance < 93) {
     card.classList.add("performance-yellow");
@@ -520,7 +521,7 @@ function renderTopBasesRanking() {
   tbody.innerHTML = ranking.map((r,i) => {
     let perfClass = "rank-red";
     if (r.completion >= 93) perfClass = "rank-green";
-    else if (r.completion >= 80) perfClass = "rank-yellow";
+    else if (r.completion >= 85) perfClass = "rank-yellow";
 
     return `
       <tr>
@@ -592,7 +593,7 @@ function renderBasePrint(base) {
   $("printBasePerformance").textContent=`${basePerformance.toFixed(2).replace(".",",")}%`;
   const perfCard=$("printBasePerformanceCard");
   perfCard.classList.remove("performance-red","performance-yellow","performance-green");
-  perfCard.classList.add(basePerformance < 80 ? "performance-red" : basePerformance < 93 ? "performance-yellow" : "performance-green");
+  perfCard.classList.add(basePerformance < 85 ? "performance-red" : basePerformance < 93 ? "performance-yellow" : "performance-green");
 
   const statuses=countBy(rows,"status");
   $("baseStatusTable").innerHTML=statuses.length?statuses.map(([s,n])=>`<tr><td>${escapeHtml(s)}</td><td>${n}</td><td>${pct(n,total)}</td></tr>`).join(""):`<tr><td colspan="3">Selecione uma base</td></tr>`;
@@ -689,98 +690,7 @@ function formatDateTime(value) {
   return String(value);
 }
 
-function renderAwbsPending(base, driver = "") {
-  const rowsBase = rawRows.filter(r => r.base === base);
-  const rows = driver ? rowsBase.filter(r => r.driver === driver) : rowsBase;
-
-  const chargeType = $("awbChargeType")?.value || "route";
-  const specificStatus = $("awbSpecificStatus")?.value || "";
-
-  let pendingRows = rows.filter(r => !isDelivered(r));
-  if (chargeType === "route") {
-    pendingRows = rows.filter(isRoute);
-  } else if (chargeType === "notdelivered") {
-    pendingRows = rows.filter(r => !isDelivered(r));
-  } else if (chargeType === "status" && specificStatus) {
-    pendingRows = rows.filter(r => normalizeStatus(r.status) === normalizeStatus(specificStatus));
-  }
-
-  const grouped = new Map();
-  for (const r of pendingRows) {
-    const driverName = r.driver || "Motorista não informado";
-    if (!grouped.has(driverName)) grouped.set(driverName, []);
-    grouped.get(driverName).push(r);
-  }
-
-  const drivers = [...grouped.entries()]
-    .sort((a,b) => b[1].length - a[1].length || a[0].localeCompare(b[0], "pt-BR"));
-
-  $("awbPrintTitle").textContent = base || "Selecione uma base";
-  $("awbPrintSupervisor").textContent = supervisorFor(base);
-  $("awbPrintDriver").textContent = driver || "Todos";
-  $("awbPrintDate").textContent = new Date().toLocaleDateString("pt-BR");
-
-  $("awbPendingCount").textContent = pendingRows.length;
-  $("awbDriverCount").textContent = drivers.length;
-
-  const el = $("awbPendingList");
-
-  if (!base) {
-    el.innerHTML = '<div class="empty-state">Selecione primeiro uma base. Depois escolha um motorista ou deixe em Todos.</div>';
-    return;
-  }
-
-  if (!pendingRows.length) {
-    el.innerHTML = `<div class="empty-state">Nenhuma AWB pendente${driver ? " para o motorista selecionado" : ""}.</div>`;
-    return;
-  }
-
-  let rowIndex = 1;
-
-  el.innerHTML = `
-    <div class="awb-master-table-wrap">
-      <table class="awb-master-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Motorista</th>
-            <th>AWB</th>
-            <th>Status Atual</th>
-            <th>Data da Última Leitura</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${drivers.map(([driverName, items], driverIndex) => {
-            const sortedItems = items
-              .map(r => ({
-                awb: r.tracking || "(sem AWB)",
-                status: r.status || "(sem status)",
-                lastRead: formatDateTime(r.lastReadTime)
-              }))
-              .sort((a,b) => a.status.localeCompare(b.status, "pt-BR") || a.awb.localeCompare(b.awb, "pt-BR"));
-
-            return `
-              <tr class="awb-driver-group">
-                <td class="awb-driver-number">${driverIndex + 1}</td>
-                <td colspan="3"><strong>${escapeHtml(driverName)}</strong></td>
-                <td><span class="awb-driver-count">${items.length} AWB${items.length === 1 ? "" : "s"}</span></td>
-              </tr>
-              ${sortedItems.map((item, i) => `
-                <tr class="awb-detail-row">
-                  <td>${i + 1}</td>
-                  <td></td>
-                  <td class="awb-code">${escapeHtml(item.awb)}</td>
-                  <td>${escapeHtml(item.status)}</td>
-                  <td>${escapeHtml(item.lastRead || "-")}</td>
-                </tr>
-              `).join("")}
-            `;
-          }).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
+function renderAwbsPending(base, driver = "") { return renderFIFO(base, driver); }
 
 document.querySelectorAll(".view-tab").forEach(btn=>btn.addEventListener("click",()=>{
   syncDependentBaseSelectors();
@@ -819,6 +729,7 @@ $("fileInput").addEventListener("change",async e=>{
     populateFilters();
     applyFilters();
     $("lastUpdate").textContent=new Date().toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+    document.dispatchEvent(new CustomEvent("imile:imported", {detail:{filename:file.name}}));
   }catch(err){console.error(err);alert("Não foi possível ler o Excel.");}
 });
 ["filterDsp","filterDriver","filterStatus"].forEach(id => {
@@ -878,7 +789,7 @@ $("clearFilters").addEventListener("click", () => {
 
   fillSelect("printBaseSelect", bases, "Selecione uma base");
   fillSelect("driverBaseSelect", bases, "Selecione uma base");
-  fillSelect("awbBaseSelect", bases, "Selecione uma base");
+  fillSelect("awbBaseSelect", bases, "Todas as bases");
   syncAwbDriverSelect("", false);
 
   fillSelect("filterDsp", uniqueSorted(rawRows,"dsp"), "Todos os DSPs");
@@ -926,7 +837,7 @@ async function saveAreaAsPng(areaId, filename) {
     await new Promise(resolve => setTimeout(resolve, 120));
 
     const canvas = await html2canvas(area, {
-      backgroundColor: "#07101f",
+      backgroundColor: "#ffffff",
       scale: 2,
       useCORS: true,
       logging: false,
@@ -973,8 +884,15 @@ $("saveAwbsImageBtn").addEventListener("click", () => {
   const driver = $("awbDriverSelect").value || "todos";
   saveAreaAsPng(
     "awbsCaptureArea",
-    `iMile_AWBs_Pendentes_${base.replaceAll(" ","_")}_${driver.replaceAll(" ","_")}.png`
+    `iMile_FIFO_${base.replaceAll(" ","_")}_${driver.replaceAll(" ","_")}.png`
   );
 });
 Chart.defaults.plugins.tooltip.titleFont = { size: 14, weight: "700" };
 Chart.defaults.plugins.tooltip.bodyFont = { size: 13 };
+
+
+
+
+
+
+
