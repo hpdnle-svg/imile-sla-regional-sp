@@ -45,7 +45,7 @@
     </nav>
 
     <main>
-      <details class="cloud-panel no-print" aria-label="Sincronização entre dispositivos">
+      <details open class="cloud-panel no-print" aria-label="Sincronização entre dispositivos">
         <summary><span class="cloud-summary-title">Sincronização entre computador e celular</span><span id="cloudStatus" role="status" aria-live="polite">Verificando conexão…</span></summary>
         <form id="cloudLogin" class="cloud-actions">
           <label>E-mail<input id="cloudEmail" type="email" autocomplete="username" required placeholder="Sua conta do painel" /></label>
@@ -53,7 +53,7 @@
           <button type="submit" class="print-btn">Entrar e sincronizar</button><button id="cloudForgotPassword" type="button" class="ghost-btn">Esqueci minha senha</button>
         </form>
         <div id="cloudConnected" class="cloud-actions" hidden>
-          <button id="cloudSave" class="print-btn" type="button">Salvar relatório online</button>
+          <button id="cloudSave" class="print-btn" type="button">Salvar relatório</button>
           <button id="cloudRefresh" class="ghost-btn" type="button">Abrir mais recente</button>
           <label>Histórico<select id="cloudHistory"><option value="">Histórico de relatórios</option></select></label>
           <button id="cloudLogout" class="ghost-btn" type="button">Sair da conta</button>
@@ -401,9 +401,10 @@
     </footer>
   </div>
 
-  <script src="percentages.js?v=14"></script><script src="presentation.js?v=12"></script><script src="app.js?v=14"></script><script src="fifo.js?v=13.2"></script><script src="supabase.js"></script><script src="cloud-config.js"></script><script src="cloud.js?v=15"></script>
+  <script src="percentages.js?v=14"></script><script src="presentation.js?v=12"></script><script src="app.js?v=14"></script><script src="fifo.js?v=13.2"></script><script src="supabase.js"></script><script src="cloud-config.js"></script><script src="cloud.js?v=16"></script>
 </body>
 </html>
+
 
 
 
