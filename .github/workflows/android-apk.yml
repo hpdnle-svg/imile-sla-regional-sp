@@ -1,0 +1,32 @@
+name: Build Android APK
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - android-source.zip
+      - .github/workflows/android-apk.yml
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack Android source
+        run: unzip -q android-source.zip -d android-src
+      - name: Compile and sign APK
+        working-directory: android-src
+        run: bash build-apk.sh
+      - name: Save installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: iMile-SLA-SP-APK
+          path: android-src/out/*
+          retention-days: 90
+      - name: Save signing identity for future updates
+        uses: actions/upload-artifact@v4
+        with:
+          name: iMile-SLA-SP-signing-private
+          path: android-src/signing/*
+          retention-days: 90
