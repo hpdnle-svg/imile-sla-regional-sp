@@ -18,16 +18,13 @@ function fifoDuration(date,now){
 function renderFIFO(base,driver=''){
  const select=document.getElementById('fifoDateColumn');
  const headers=[...new Set(rawRows.flatMap(r=>Object.keys(r.original||{})))];
- const previous=select.value;
+ const normalizeHeader=h=>h.normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/\s+/g,' ');
+ const hubColumn=headers.find(h=>normalizeHeader(h)==='horario de recebimento (hub)')||'';
  if(select.dataset.headers!==JSON.stringify(headers)){
-  select.replaceChildren(new Option('Selecione a coluna de entrada na base',''));
-  headers.forEach(h=>select.add(new Option(h,h)));select.dataset.headers=JSON.stringify(headers);
-  const normalizeHeader=h=>h.normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase().replace(/\s+/g,' ');
-  const receiptAliases=['recebimento','data de recebimento','data do recebimento','horario de recebimento','hora de recebimento'];
-  const receipt=headers.find(h=>receiptAliases.includes(normalizeHeader(h)));
-  const aliases=['data de entrada na base','horario de entrada na base','data de recebimento na base','horario de recebimento na base','data de chegada na base'];
-  select.value=receipt||(headers.includes(previous)?previous:(headers.find(h=>aliases.includes(normalizeHeader(h)))||''));
+  select.replaceChildren(new Option(hubColumn?'Horário de recebimento (HUB)':'Coluna HUB não encontrada',hubColumn));
+  select.dataset.headers=JSON.stringify(headers);
  }
+ select.value=hubColumn;select.disabled=true;
  const column=select.value,now=new Date();
  const supervisor=document.getElementById('filterSupervisor').value;
  const scope=filteredRows.filter(r=>!isDelivered(r)&&(!base||r.base===base)&&(!driver||r.driver===driver)&&(!supervisor||supervisorFor(r.base)===supervisor));
@@ -42,12 +39,13 @@ function renderFIFO(base,driver=''){
  document.getElementById('awbDriverCount').textContent=new Set(eligible.map(x=>x.r.driver).filter(Boolean)).size;
  document.getElementById('fifoUnclassified').textContent=invalid.toLocaleString('pt-BR');
  document.getElementById('fifoOldest').textContent=eligible.length?fifoDuration(eligible[0].date,now):'—';
- document.getElementById('fifoDateNotice').textContent=column?`Entrada na base: ${column}. Corte: mais de 72 horas. ${invalid} pendências sem data válida ou com data futura ficaram fora da classificação.`:'Selecione a coluna de entrada na base. Não usamos criação do pedido nem última leitura automaticamente para inferir permanência.';
+ document.getElementById('fifoDateNotice').textContent=column?`Horário de recebimento (HUB): ${column}. Corte: mais de 72 horas. ${invalid} pendências sem data válida ou com data futura ficaram fora da classificação.`:'A coluna Horário de recebimento (HUB) não foi encontrada no relatório. Importe um Excel que contenha essa coluna.';
  const el=document.getElementById('awbPendingList');
- if(!column){el.innerHTML='<div class="empty-state">Para identificar os pedidos com mais de 3 dias, selecione acima a coluna que registra a entrada na base.</div>';return;}
+ if(!column){el.innerHTML='<div class="empty-state">Para identificar os pedidos com mais de 3 dias, o relatório precisa conter a coluna Horário de recebimento (HUB).</div>';return;}
  if(!eligible.length){el.innerHTML='<div class="empty-state">Nenhum pedido não entregue com entrada válida há mais de 72 horas neste filtro.</div>';return;}
- el.innerHTML=`<div class="table-wrap"><table class="data-table fifo-table"><thead><tr><th>Ordem FIFO</th><th>AWB</th><th>Base / DS</th><th>Entrada na base</th><th>Tempo na base</th><th>Status atual</th><th>Motorista</th><th>Prioridade</th></tr></thead><tbody>${eligible.map(({r,date},i)=>`<tr><td>${i+1}</td><td class="awb-code">${escapeHtml(r.tracking||'Sem AWB')}</td><td>${escapeHtml(r.base||'Não informada')}</td><td>${escapeHtml(date.toLocaleString('pt-BR'))}</td><td><strong>${fifoDuration(date,now)}</strong></td><td>${escapeHtml(r.status||'Não informado')}</td><td>${escapeHtml(r.driver||'Não informado')}</td><td><span class="fifo-priority">Entregar hoje</span></td></tr>`).join('')}</tbody></table></div>`;
+ el.innerHTML=`<div class="table-wrap"><table class="data-table fifo-table"><thead><tr><th>Ordem FIFO</th><th>AWB</th><th>Base / DS</th><th>Recebimento (HUB)</th><th>Tempo na base</th><th>Status atual</th><th>Motorista</th><th>Prioridade</th></tr></thead><tbody>${eligible.map(({r,date},i)=>`<tr><td>${i+1}</td><td class="awb-code">${escapeHtml(r.tracking||'Sem AWB')}</td><td>${escapeHtml(r.base||'Não informada')}</td><td>${escapeHtml(date.toLocaleString('pt-BR'))}</td><td><strong>${fifoDuration(date,now)}</strong></td><td>${escapeHtml(r.status||'Não informado')}</td><td>${escapeHtml(r.driver||'Não informado')}</td><td><span class="fifo-priority">Entregar hoje</span></td></tr>`).join('')}</tbody></table></div>`;
 }
 document.getElementById('fifoDateColumn').addEventListener('change',()=>renderFIFO(document.getElementById('awbBaseSelect').value,document.getElementById('awbDriverSelect').value));
 setInterval(()=>{if(document.getElementById('awbsPendingView').classList.contains('active'))renderFIFO(document.getElementById('awbBaseSelect').value,document.getElementById('awbDriverSelect').value);},60000);
+
 

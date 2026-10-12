@@ -9,3 +9,9 @@ body.v9.v12 .awb-summary-card{background:#f7faff!important;border:1px solid #dce
 body.v9.v12 .awb-summary-card strong{font-size:30px!important;color:#e51f40!important}.fifo-table td:nth-child(5){color:#d0183c!important;white-space:nowrap}
 @media(max-width:850px){body.v9.v12 .awb-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.fifo-banner{padding:18px}.fifo-banner strong{font-size:18px}.fifo-table{min-width:1050px}}
 @media print{.fifo-banner{print-color-adjust:exact}.fifo-table{font-size:10px!important}}
+
+/* Sem filtro por status: todos os status ficam disponíveis ao painel. */
+body .filters #filterStatus { display:none !important; }
+@media(min-width:1201px){ body .filters { grid-template-columns:repeat(4,minmax(145px,1fr)) 150px !important; } }
+body #fifoDateColumn:disabled { opacity:1; color:#17365f; cursor:default; }
+

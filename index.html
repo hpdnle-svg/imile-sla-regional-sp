@@ -10,7 +10,7 @@
   <script src="html2canvas.js"></script>
 <link rel="stylesheet" href="design-v9.css?v=9" />
   <link rel="stylesheet" href="design-v11.css?v=11" /><link rel="stylesheet" href="design-v12.css?v=12" />
-<link rel="stylesheet" href="fifo.css?v=13" /></head>
+<link rel="stylesheet" href="fifo.css?v=17" /></head>
 <body class="v9 v11 v12">
   <div class="app-shell">
     <header class="topbar">
@@ -87,7 +87,7 @@
 
         <label class="filter-field"><span>DSPs</span><select id="filterDsp"><option value="">Todos os DSPs</option></select></label>
         <label class="filter-field"><span>Motoristas</span><select id="filterDriver"><option value="">Todos os motoristas</option></select></label>
-        <label class="filter-field"><span>Status</span><select id="filterStatus"><option value="">Todos os status</option></select></label>
+        <select id="filterStatus" hidden aria-hidden="true" tabindex="-1"><option value="">Todos os status</option></select>
         <button id="clearFilters" class="ghost-btn">Limpar filtros</button>
       </section>
 
@@ -337,7 +337,7 @@
             </select>
           </div>
           <div>
-            <label>3. Coluna de entrada na base</label><select id="fifoDateColumn"><option value="">Selecione a coluna de entrada na base</option></select><label hidden>Filtro anterior</label>
+            <label>3. Horário de recebimento (HUB)</label><select id="fifoDateColumn" disabled><option value="">Horário de recebimento (HUB)</option></select><label hidden>Filtro anterior</label>
             <select id="awbChargeType" disabled hidden>
               <option value="route">Em rota</option>
               <option value="pending">Todos os pendentes</option>
@@ -401,9 +401,10 @@
     </footer>
   </div>
 
-  <script src="percentages.js?v=14"></script><script src="presentation.js?v=12"></script><script src="app.js?v=14"></script><script src="fifo.js?v=13.2"></script><script src="supabase.js"></script><script src="cloud-config.js"></script><script src="cloud.js?v=16"></script>
+  <script src="percentages.js?v=14"></script><script src="presentation.js?v=12"></script><script src="app.js?v=14"></script><script src="fifo.js?v=17"></script><script src="supabase.js"></script><script src="cloud-config.js"></script><script src="cloud.js?v=16"></script>
 </body>
 </html>
+
 
 
 
